@@ -21,7 +21,7 @@ drive_base = DriveBase(left_motor,right_motor,57,10)
 
 
 def drive():   
-    drive_base.drive(500, 0)
+    drive_base.drive(850, 180)
 
 
 def reverse_drive():
