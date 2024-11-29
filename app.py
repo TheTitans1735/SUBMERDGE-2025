@@ -1,7 +1,7 @@
 from pybricks.hubs import PrimeHub
 from pybricks.pupdevices import Motor
 from pybricks.robotics import DriveBase
-from pybricks.parameters import Port, _Matrix
+from pybricks.parameters import Port
 from pybricks.tools import wait
 from pybricks.parameters import Icon, Color, Button, Direction
 
@@ -21,7 +21,7 @@ drive_base = DriveBase(left_motor,right_motor,57,10)
 
 
 def drive():   
-    drive_base.drive(100, 0)
+    drive_base.drive(500, 0)
 
 
 def reverse_drive():
@@ -51,14 +51,6 @@ def stop_all():
     motor_front.stop()
 
 
-MOTOR_FRONT_LEFT: _Matrix = ...
-"""
-| 🟨⬜🟨⬜⬜
-| 🟨🟨⬜⬜⬜
-| 🟨⬜🟨⬜⬜
-| ⬜⬜⬜🟨⬜
-| ⬜⬜⬜⬜🟨
-"""
 
 
 runs = [
