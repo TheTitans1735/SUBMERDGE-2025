@@ -21,7 +21,7 @@ drive_base = DriveBase(left_motor,right_motor,57,10)
 
 
 def drive():   
-    drive_base.drive(850, 180)
+    drive_base.drive(100)
 
 
 def reverse_drive():
@@ -41,7 +41,7 @@ def back_motor():
 
 def front_motor_reverse():
     motor_front.dc(-50)
-
+    
 def back_motor_reverse():
     motor_back.dc(-50)
 
@@ -50,6 +50,15 @@ def stop_all():
     motor_back.stop()
     motor_front.stop()
 
+def nigg():
+    
+    drive_base.straight(-320.50)
+    wait(1)
+    motor_back.dc(-123)
+    wait(1)
+    drive_base.straight(-20)
+    wait(1)  
+    drive_base.straight(350)
 
 
 
@@ -62,6 +71,7 @@ runs = [
     ("2", back_motor),
     ("3", front_motor_reverse),
     ("4", back_motor_reverse),
+    ("5", nigg, Icon.CIRCLE),
     
 ]
 current_run = 0
