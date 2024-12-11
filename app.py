@@ -4,7 +4,9 @@ from pybricks.robotics import DriveBase
 from pybricks.parameters import Port
 from pybricks.tools import wait
 from pybricks.parameters import Icon, Color, Button, Direction
+from robot import Robot
 
+ilan=Robot()
 # # Port A - Right color sensor
 # # Port B - Right wheel
 # # Port C - Medium motor - front
@@ -12,54 +14,63 @@ from pybricks.parameters import Icon, Color, Button, Direction
 # # Port E - Left color sensor
 # # Port F - Left wheel
 
-hub = PrimeHub()
-left_motor = Motor(Port.F, Direction.COUNTERCLOCKWISE)
-right_motor = Motor(Port.B)
-motor_front = Motor(Port.C)
-motor_back = Motor(Port.D)
-drive_base = DriveBase(left_motor,right_motor,57,10) 
+# hub = PrimeHub()
+# left_motor = Motor(Port.F, Direction.COUNTERCLOCKWISE)
+# right_motor = Motor(Port.B)
+# motor_front = Motor(Port.C)
+# motor_back = Motor(Port.D)
+# drive_base = DriveBase(left_motor,right_motor,57,10) 
 
 
 def drive():   
-    drive_base.drive(100)
+    ilan.drive_base.drive(150,0)
 
 
 def reverse_drive():
-    drive_base.drive(-100, 0)
+    ilan.drive_base.drive(-100, 0)
 
 def turn_left():
-    drive_base.turn(-360,wait=False)
+    ilan.drive_base.turn(-360,wait=False)
 
 def turn_right():
-    drive_base.turn(360,wait=False)
+    ilan.drive_base.turn(360,wait=False)
 
 def front_motor():
-    motor_front.dc(50)
+    ilan.motor_front.dc(50)
 
 def back_motor():
-    motor_back.dc(50)
+    ilan.motor_back.dc(50)
 
 def front_motor_reverse():
-    motor_front.dc(-50)
+    ilan.motor_front.dc(-50)
     
 def back_motor_reverse():
-    motor_back.dc(-50)
+    ilan.motor_back.dc(-50)
 
 def stop_all():
-    drive_base.stop()
-    motor_back.stop()
-    motor_front.stop()
+    ilan.drive_base.stop()
+    ilan.motor_back.stop()
+    ilan.motor_front.stop()
 
 def nigg():
     
-    drive_base.straight(-320.50)
-    wait(1)
-    motor_back.dc(-123)
-    wait(1)
-    drive_base.straight(-20)
-    wait(1)  
-    drive_base.straight(350)
+    ilan.drive_base.straight(320.50)
+    wait(1000)
+    ilan.motor_back.dc(80)
+    wait(1000)
+    ilan.motor_back.dc(-10)
+    ilan.drive_base.straight(20)
+    wait(1000)  
+    ilan.drive_base.straight(-350)
 
+def test():
+
+    ilan.drive_straight(10)
+    wait(2000)
+    ilan.drive_back(10)
+
+def crabs():
+    ilan.drive_base.curve(angle=-180, radius=0)
 
 
 runs = [
@@ -72,26 +83,31 @@ runs = [
     ("3", front_motor_reverse),
     ("4", back_motor_reverse),
     ("5", nigg, Icon.CIRCLE),
+    ("6", test, Icon.FALSE),
+    ("crabs", crabs, Icon.HAPPY)
     
 ]
 current_run = 0
-print("current", hub.battery.current(), "voltage", hub.battery.voltage())
-# hub.display.icon(runs[current_run][2])
-# hub.display.char(runs[current_run][0])
+print("current", ilan.hub.battery.current(), "voltage", ilan.hub.battery.voltage())
+
 while True:
     try:
-        if (Button.LEFT in hub.buttons.pressed()):
+        if (Button.LEFT in ilan.hub.buttons.pressed()):
             current_run += 1
             if current_run >= len(runs):
                 current_run = 0
-            hub.display.char(runs[current_run][0])
-            hub.display.icon(runs[current_run][2])
+            if len(runs[current_run]) ==2:
+                ilan.hub.display.char(runs[current_run][0])
+            else:
+                ilan.hub.display.icon(runs[current_run][2])
 
-        elif (Button.RIGHT in hub.buttons.pressed()):
+        elif (Button.RIGHT in ilan.hub.buttons.pressed()):
             runs[current_run][1]()
         else:
             stop_all()
-    except:
-         pass
+    except Exception as e:
+         print(e)
     finally:
         wait(100)
+
+
