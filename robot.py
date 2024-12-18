@@ -1,4 +1,5 @@
 
+
 from pybricks.hubs import PrimeHub
 from pybricks.pupdevices import Motor
 from pybricks.robotics import DriveBase
@@ -22,23 +23,23 @@ class Robot:
         self.motor_front = Motor(Port.C)
         self.motor_back = Motor(Port.D)
         self.drive_base = DriveBase(self.left_motor, self.right_motor,57,10) 
-        self.drive_base.use_gyro(True)
+        # self.drive_base.use_gyro(True)
 
 
     def drive_straight(
         self,
         distance_cm, 
-        speed=400, 
+        speed=800, 
         timeout_seconds=None,   # TODO: Support drive by seconds
         stop_at_end=True,
-        acceleration_rate=50,
-        deceleration_rate=50,
+        acceleration_rate=400,
+        deceleration_rate=400,
     ):
         self.drive_base.settings(
             straight_speed=speed, 
             straight_acceleration=(acceleration_rate, deceleration_rate), 
-            turn_rate=90, 
-            turn_acceleration=30,
+            turn_rate=None, 
+            turn_acceleration=None,
         )
         self.drive_base.straight(
             distance=distance_cm*10,
@@ -49,11 +50,11 @@ class Robot:
     def drive_back(
         self,
         distance_cm, 
-        speed=400, 
+        speed=800, 
         timeout_seconds=None,   # TODO: Support drive by seconds
         stop_at_end=True,
-        acceleration_rate=50,
-        deceleration_rate=50,
+        acceleration_rate=400,
+        deceleration_rate=400,
     ):
         self.drive_straight(
             distance_cm=-1*distance_cm, 
@@ -64,5 +65,14 @@ class Robot:
             deceleration_rate=deceleration_rate,
         )
 
-    def run_front_motor(self, speed, angle, timeout_seconds):
-        pass
+    def run_front_motor(self, speed, angle):
+
+        self.motor_front.reset_angle(angle=0)
+        self.motor_front.run_target(speed, target_angle=angle, then=Stop.HOLD, wait=True)
+    def run_back_motor(
+            self,
+            speed,
+            angle,
+    ):
+        self.motor_back.reset_angle(angle=0)
+        self.motor_back.run_target(speed, target_angle=angle, then=Stop.HOLD, wait=True)

@@ -72,6 +72,10 @@ def test():
 def crabs():
     ilan.drive_base.curve(angle=-180, radius=0)
 
+def test2():
+    ilan.run_back_motor(250,720)
+
+
 
 runs = [
     ("5", drive, Icon.ARROW_LEFT),
@@ -84,8 +88,8 @@ runs = [
     ("4", back_motor_reverse),
     ("5", nigg, Icon.CIRCLE),
     ("6", test, Icon.FALSE),
-    ("crabs", crabs, Icon.HAPPY)
-    
+    ("crabs", crabs, Icon.HAPPY),
+    ("7",test2, Icon.FULL),
 ]
 current_run = 0
 print("current", ilan.hub.battery.current(), "voltage", ilan.hub.battery.voltage())
@@ -107,6 +111,7 @@ while True:
             stop_all()
     except Exception as e:
          print(e)
+         raise e
     finally:
         wait(100)
 

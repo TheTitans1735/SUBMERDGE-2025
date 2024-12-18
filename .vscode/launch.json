@@ -17,6 +17,20 @@
                 "app.py"
             ],
             "console": "integratedTerminal" 
+        },
+        {
+            "name": "app.py(YAHAV)",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "pybricksdev",
+            "args": [
+                "run",
+                "ble",
+                "--name",
+                "YAHAV",
+                "app.py"
+            ],
+            "console": "integratedTerminal" 
         }
     ]
 }
