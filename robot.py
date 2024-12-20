@@ -69,10 +69,8 @@ class Robot:
 
         self.motor_front.reset_angle(angle=0)
         self.motor_front.run_target(speed, target_angle=angle, then=Stop.HOLD, wait=True)
-    def run_back_motor(
-            self,
-            speed,
-            angle,
-    ):
+
+    def run_back_motor(self, speed,angle):
+
         self.motor_back.reset_angle(angle=0)
         self.motor_back.run_target(speed, target_angle=angle, then=Stop.HOLD, wait=True)
