@@ -16,7 +16,10 @@
                 "Ilan Prime",
                 "app.py"
             ],
-            "console": "integratedTerminal" 
+            "console": "integratedTerminal",
+            "env": {
+                "PYTHONUTF8": "1"
+            }
         },
         {
             "name": "app.py(YAHAV)",
@@ -30,7 +33,10 @@
                 "YAHAV",
                 "app.py"
             ],
-            "console": "integratedTerminal" 
+            "console": "integratedTerminal",
+            "env": {
+                "PYTHONUTF8": "1"
+            }
         }
     ]
 }

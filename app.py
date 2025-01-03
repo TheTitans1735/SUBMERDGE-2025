@@ -23,11 +23,11 @@ ilan=Robot()
 
 
 def drive():   
-    ilan.drive_base.drive(150,0)
+    ilan.drive_base.drive(151,0)
 
 
 def reverse_drive():
-    ilan.drive_base.drive(-100, 0)
+    ilan.drive_base.drive(-750, 0)
 
 def turn_left():
     ilan.drive_base.turn(-360,wait=False)
@@ -36,16 +36,16 @@ def turn_right():
     ilan.drive_base.turn(360,wait=False)
 
 def front_motor():
-    ilan.motor_front.dc(50)
+    ilan.motor_front.dc(500)
 
 def back_motor():
-    ilan.motor_back.dc(50)
+    ilan.motor_back.dc(500)
 
 def front_motor_reverse():
     ilan.motor_front.dc(-50)
     
 def back_motor_reverse():
-    ilan.motor_back.dc(-50)
+    ilan.motor_back.dc(-500)
 
 def stop_all():
     ilan.drive_base.stop()
@@ -63,18 +63,64 @@ def nigg():
     wait(1000)  
     ilan.drive_base.straight(-350)
 
-def test():
+def turn():
+    # ilan.drive_base.curve(angle=-180, radius=0)
+    ilan.turn(90,150)
+    ilan.wait_for_button(True)
+    wait(1000)
+    ilan.turn(-90, 150)
 
-    ilan.drive_straight(10)
-    wait(2000)
-    ilan.drive_back(10)
+
+def whale():
+    ilan.drive_straight(20)
+    ilan.motor_back.run_until_stalled(100, duty_limit=50)
+    ilan.run_back_motor(400,-90, wait= False)
+    ilan.wait_for_button()
+    ilan.drive_straight(52)
+    ilan.wait_for_button(debug= False)
+    ilan.motor_back.run_until_stalled(30, duty_limit=40)
+    ilan.motor_back.run_angle(100,-90, wait= False)
+    ilan.turn(47)
+    ilan.wait_for_button(debug= False)
+    ilan.drive_straight(19,100)
+    ilan.drive_back(2,150)
+    ilan.drive_until_both_on_line()
+    ilan.drive_straight(2,150)
+
 
 def crabs():
-    ilan.drive_base.curve(angle=-180, radius=0)
+    ilan.drive_straight(-97,350)
+    # ilan.turn(-10)
+    ilan.wait_for_button()
+    # ilan.drive_back()
+    ilan.drive_straight(-16)
+    ilan.wait_for_button()
+    ilan.turn(-90)
+    ilan.wait_for_button()
+    ilan.drive_straight(-11)
+    ilan.wait_for_button()
+    ilan.turn(-90)
+    ilan.wait_for_button()
+    ilan.drive_straight(-28.5)
+    ilan.drive_back(17)
+    ilan.wait_for_button()
+    ilan.turn(90)
+    ilan.drive_straight(-25)
+    ilan.wait_for_button()
+    ilan.turn(90)
+    ilan.drive_straight(-6)
+    ilan.wait_for_button()
+    ilan.run_back_motor(150,150)
+    ilan.wait_for_button()
+    ilan.drive_straight(8)
+    ilan.wait_for_button()
+    ilan.drive_straight(-80)
 
-def test2():
-    ilan.run_back_motor(250,720)
-
+def test():
+    # ilan.arc_turn(5, 180, 450)
+    # ilan.drive_straight_pid(200,3000)
+    # ilan.drive_until_both_on_line()
+    whale()
 
 
 runs = [
@@ -87,13 +133,14 @@ runs = [
     ("3", front_motor_reverse),
     ("4", back_motor_reverse),
     ("5", nigg, Icon.CIRCLE),
-    ("6", test, Icon.FALSE),
+    ("6", turn, Icon.CLOCKWISE),
     ("crabs", crabs, Icon.HAPPY),
-    ("7",test2, Icon.FULL),
+    ("7",whale, Icon.FULL),
+    ("T", test)
 ]
 current_run = 0
 print("current", ilan.hub.battery.current(), "voltage", ilan.hub.battery.voltage())
-
+        
 while True:
     try:
         if (Button.LEFT in ilan.hub.buttons.pressed()):
@@ -107,6 +154,9 @@ while True:
 
         elif (Button.RIGHT in ilan.hub.buttons.pressed()):
             runs[current_run][1]()
+
+        elif (Button.BLUETOOTH in ilan.hub.buttons.pressed()):
+            test()
         else:
             stop_all()
     except Exception as e:
