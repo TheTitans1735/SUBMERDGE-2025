@@ -4,25 +4,25 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-        // {
-        //     "name": "Run app.py",
-        //     "type": "debugpy",
-        //     "request": "launch",
-        //     "module": "pybricksdev",
-        //     "args": [
-        //         "run",
-        //         "ble",
-        //         "--name",
-        //         "Ilan Prime",
-        //         "app.py"
-        //     ],
-        //     "console": "integratedTerminal",
-        //     "env": {
-        //         "PYTHONUTF8": "1"
-        //     }
-        // },
         {
-            "name": "app.py(YAHAV)",
+            "name": "Run app.py",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "pybricksdev",
+            "args": [
+                "run",
+                "ble",
+                "--name",
+                "Ilan Prime",
+                "app.py"
+            ],
+            "console": "integratedTerminal",
+            "env": {
+                "PYTHONUTF8": "1"
+            }
+        },
+        {
+            "name": "engine only",
             "type": "debugpy",
             "request": "launch",
             "module": "pybricksdev",
@@ -32,6 +32,23 @@
                 "--name",
                 "YAHAV",
                 "rtmtst1.py"
+            ],
+            "console": "integratedTerminal",
+            "env": {
+                "PYTHONUTF8": "1"
+            }
+        },
+        {
+            "name": "test.py",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "pybricksdev",
+            "args": [
+                "run",
+                "ble",
+                "--name",
+                "Ilan Prime",
+                "test.py"
             ],
             "console": "integratedTerminal",
             "env": {

@@ -32,7 +32,6 @@ class Robot:
         self,
         distance_cm, 
         speed=450, 
-    
         timeout_seconds=None,   # TODO: Support drive by seconds
         stop_at_end=True,
         acceleration_rate=400,
@@ -205,3 +204,5 @@ class Robot:
             if left_intensity < threshold and right_intensity < threshold:
                 print("Aligned to the line!")
                 break
+
+
