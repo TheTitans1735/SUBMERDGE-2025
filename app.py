@@ -87,6 +87,15 @@ def whale():
     ilan.drive_until_both_on_line()
     ilan.drive_straight(2,150)
 
+def sonar():
+    ilan.drive_back(30,300)
+    ilan.turn(90)
+    ilan.drive_straight(13)
+    ilan.run_back_motor(50,-120)
+    ilan.turn(-5)
+    ilan.drive_back(49)
+    ilan.run_back_motor(-90,300)
+    # ilan.arc_tur
 
 def crabs():
     ilan.drive_straight(-97,350)
@@ -120,7 +129,7 @@ def test():
     # ilan.arc_turn(5, 180, 450)
     # ilan.drive_straight_pid(200,3000)
     # ilan.drive_until_both_on_line()
-    whale()
+    ilan.run_back_motor(150,90)
 
 
 runs = [
@@ -136,7 +145,8 @@ runs = [
     ("6", turn, Icon.CLOCKWISE),
     ("crabs", crabs, Icon.HAPPY),
     ("7",whale, Icon.FULL),
-    ("T", test)
+    ("T", test),
+    ("8", sonar,Icon.HEART),
 ]
 current_run = 0
 print("current", ilan.hub.battery.current(), "voltage", ilan.hub.battery.voltage())
