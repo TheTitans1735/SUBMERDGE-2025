@@ -1,5 +1,3 @@
-
-
 from pybricks.hubs import PrimeHub
 from pybricks.pupdevices import Motor, ColorSensor
 from pybricks.parameters import Port, Direction
@@ -38,55 +36,72 @@ class Robot:
         self.gyro_sensor = self.hub.imu
         
 
-    def drive_straight_pid(self, distance_cm, speed=450, direction=1, stop_at_end=True, timeout_seconds=None):
+    def drive_straight_pid(
+        self, 
+        distance_cm, 
+        target_speed=450, 
+        stop_at_end=True, 
+        timeout_seconds=None, 
+        gradual_stop=True, 
+        gradual_stop_distance=10,
+        gradual_start=True,
+        gradual_start_distance=10,
+    ):
         """
-        Drive straight using PID control for the DriveBase based on the IMU angle.
+        Drive straight using PID control for the DriveBase based on the drive base angle.
+        Negative distance_cm values will drive backwards.
         :param distance_cm: Distance in centimeters.
         :param speed: Speed in degrees per second.
-        :param direction: 1 for forward, -1 for backward.
         :param stop_at_end: Whether to stop the motors when finished.
         :param timeout_seconds: Timeout for the movement (optional).
         """
-        pid = PIDController(kp=2, ki=0.01, kd=0.5)  # הגדרת פרמטרי PID
-        target_distance = distance_cm * 10  # המרחק במילימטרים (המרה מ-ס"מ למ"מ)
-        target_angle = 0
-
-        # Reset motor angles to zero at the start
-        self.drive_base.reset()
-
+        # Initialize PID controller
+        pid = PIDController(kp=0.6, ki=0.2, kd=1.8)
+        # Initialize the timer
         timer = StopWatch()
+        # Calculate the target angle
+        target_distance = distance_cm * 10
+        #set the speed according to the distance
+        if distance_cm < 0:
+            target_speed = -target_speed
+        # reset robot angle and distance
+        self.drive_base.reset()
+        direction = 1 if distance_cm > 0 else -1
 
-
+        # Drive until the target distance is reached, correct angle using PID
         while True:
-            # קבלת הזווית הנוכחית מה-DriveBase
+            # Calculate the current angle
             current_angle = self.drive_base.angle()
-
-            # חישוב ההפרש בין הזווית הנוכחית לזווית היעד
-            error = target_angle - current_angle
-            pid_output = pid.compute(0, error)  # PID יחפש לתקן את ההפרש
-
-            # הדפסת דיבוג
-            print(f"Current angle: {current_angle}, Target angle: {target_angle}, PID Output: {pid_output}")
-
-            # עדכון המהירות של ה-DriveBase לפי פלט ה-PID
-            self.drive_base.drive(direction * speed , pid_output)
-
-            # מחשבים את הזווית הכוללת על פי המנועים
-            current_distance = self.drive_base.distance()
-
-            # בדיקת תנאי סיום (כשהגענו למרחק הרצוי)
-            if abs(target_distance - current_distance) < 5:  # מרחק שגיאה קטן מספיק להפסיק את הנהיגה
-                if stop_at_end:
-                    self.drive_base.stop()
+            # Calculate the correction
+            correction = pid.compute(0, current_angle)
+            # Calculate the speed if gradual start/stop is enabled according to distance
+            if abs(self.drive_base.distance()) < target_distance / 2:
+                speed = target_speed
+                if gradual_start:
+                    speed = target_speed * abs(self.drive_base.distance()) / (target_distance / 2)
+            else:
+                speed = target_speed
+                if gradual_stop:
+                    speed = target_speed * (target_distance - abs(self.drive_base.distance())) / (target_distance / 2)        
+            #set minimum speed
+            if abs(speed) < 100:
+                speed = 100 * direction 
+            # speed = target_speed
+            # Set the motor speed
+            self.drive_base.drive(speed, correction)
+            # Check if the target distance is reached
+            if abs(self.drive_base.distance()) >= abs(target_distance):
                 break
-
-            # בדיקת זמן אם יש זמן פסק זמן
-            if timeout_seconds and (timer.time() > timeout_seconds):
-                self.drive_base.stop()
+            # Check if the timeout is reached
+            if timeout_seconds is not None and timer.time() > timeout_seconds:
                 break
-
+            # Wait for the next iteration
             wait(10)
+        # Stop the motors
+        if stop_at_end:
+            self.drive_base.stop()
+
 
 ilan = Robot()
 # ilan.drive_straight(10)  # נסיעה 10 ס"מ
-ilan.drive_straight_pid(50, 250, 1)
+ilan.drive_straight_pid(50, 250)
