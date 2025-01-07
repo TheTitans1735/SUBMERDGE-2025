@@ -56,7 +56,10 @@ class Robot:
         :param timeout_seconds: Timeout for the movement (optional).
         """
         # Initialize PID controller
-        pid = PIDController(kp=0.6, ki=0.2, kd=1.8)
+        # p = סטייה עכשיות 
+        # i = מתקן לזווית 0
+        # d = מחזיר למסלול המקורי
+        pid = PIDController(kp=0.8, ki=0.13, kd=2.2)
         # Initialize the timer
         timer = StopWatch()
         # Calculate the target angle
