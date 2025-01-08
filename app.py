@@ -120,7 +120,14 @@ def test():
     # ilan.arc_turn(5, 180, 450)
     # ilan.drive_straight_pid(200,3000)
     # ilan.drive_until_both_on_line()
-    ilan.drive_straight_pid(10,300)
+    ilan.drive_straight(20,250)
+    # wait(1000)
+    # ilan.drive_straight(-50,100)
+
+    # ilan.turn(90,150)
+    # ilan.drive_straight(115,550)
+    # ilan.turn(90,150)
+    # ilan.drive_straight(75,300)
 
 runs = [
     ("5", drive, Icon.ARROW_LEFT),

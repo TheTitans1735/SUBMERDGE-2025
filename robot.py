@@ -44,7 +44,7 @@ class Robot:
         self.right__color_sensor = ColorSensor(Port.A)       
             # self.drive_base.use_gyro(True)
 
-    def drive_straight(
+    def drive_straight_old(
         self,
         distance_cm, 
         speed=450, 
@@ -222,7 +222,7 @@ class Robot:
                 break
 
 
-    def drive_straight_pid(
+    def drive_straight(
         self, 
         distance_cm, 
         target_speed=450, 
@@ -245,7 +245,8 @@ class Robot:
         # p = סטייה עכשיות 
         # i = מתקן לזווית 0
         # d = מחזיר למסלול המקורי
-        pid = PIDController(kp=0.8, ki=0.13, kd=2.2)
+        # pid = PIDController(kp=0.8, ki=0.14, kd=2.25)
+        pid = PIDController(kp=1, ki=0.1, kd=1)
         # Initialize the timer
         timer = StopWatch()
         # Calculate the target angle
@@ -253,6 +254,7 @@ class Robot:
         #set the speed according to the distance
         if distance_cm < 0:
             target_speed = -target_speed
+            target_distance = -target_distance
         # reset robot angle and distance
         self.drive_base.reset()
         direction = 1 if distance_cm > 0 else -1
@@ -261,25 +263,26 @@ class Robot:
         while True:
             # Calculate the current angle
             current_angle = self.drive_base.angle()
+            current_distance = self.drive_base.distance()
             # Calculate the correction
             correction = pid.compute(0, current_angle)
             # Calculate the speed if gradual start/stop is enabled according to distance
-            if abs(self.drive_base.distance()) < target_distance / 2:
+            if abs(current_distance) < target_distance / 2:
                 speed = target_speed
                 if gradual_start:
-                    speed = target_speed * abs(self.drive_base.distance()) / (target_distance / 2)
+                    speed = target_speed * abs(current_distance) / (target_distance / 2)
             else:
                 speed = target_speed
                 if gradual_stop:
-                    speed = target_speed * (target_distance - abs(self.drive_base.distance())) / (target_distance / 2)        
+                    speed = target_speed * (target_distance - abs(current_distance)) / (target_distance / 2)        
             #set minimum speed
             if abs(speed) < 100:
                 speed = 100 * direction 
-            # speed = target_speed
+            print(f"Speed: {speed}, Correction: {correction}, travel: {current_distance}, current_angle: {current_angle}")
             # Set the motor speed
             self.drive_base.drive(speed, correction)
             # Check if the target distance is reached
-            if abs(self.drive_base.distance()) >= abs(target_distance):
+            if abs(current_distance) >= abs(target_distance):
                 break
             # Check if the timeout is reached
             if timeout_seconds is not None and timer.time() > timeout_seconds:
