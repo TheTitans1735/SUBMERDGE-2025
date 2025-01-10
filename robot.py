@@ -88,84 +88,19 @@ class Robot:
         self.motor_front.reset_angle(angle=0)
         self.motor_front.run_target(speed, target_angle=angle, then=Stop.HOLD, wait=wait)
         
-    def run_back_motor(
-            self,
-            speed,
-            angle,
-            wait= True
-    ):
-        self.motor_back.reset_angle(angle=0)
-        self.motor_back.run_target(speed, target_angle=angle, then=Stop.HOLD, wait=wait)
-
-    def arc_turn(self, radius_cm, angle_deg, speed=150):
+    def run_back_motor(self, speed, angle, wait=True):
         """
-        Moves the robot in an arc with a specified radius (in cm) and angle (in degrees).
-        The radius is measured from the center of the robot to the midpoint between the wheels.
+        Run the back motor to a specific angle at a given speed.
+        :param speed: The speed at which to run the motor.
+        :param angle: The target angle to run the motor to.
+        :param wait: Whether to wait for the motor to reach the target angle.
         """
-        # Robot dimensions
-        wheel_diameter_mm = 57  # Diameter of the wheel in mm
-        axle_track_cm = 11.2  # Distance between the wheels in cm
-        gyro_offset_cm = 3.5  # Distance of gyro from wheel center
-        wheel_circumference_mm = wheel_diameter_mm * 3.14159  # Circumference of the wheel in mm
+        self.motor_back.reset_angle(0)
+        self.motor_back.run_target(speed, angle, then=Stop.HOLD, wait=wait)
 
-        # Adjust the radius to account for the gyro's offset
-        effective_radius_cm = radius_cm - gyro_offset_cm
 
-        # Calculate the path lengths for the inner and outer wheels
-        outer_radius_cm = effective_radius_cm + (axle_track_cm / 2)
-        inner_radius_cm = effective_radius_cm - (axle_track_cm / 2)
 
-        # Circumferences of the outer and inner arcs
-        outer_arc_length_cm = (2 * 3.14159 * outer_radius_cm) * (angle_deg / 360)  # outer circumference * number of rounds
-        inner_arc_length_cm = (2 * 3.14159 * inner_radius_cm) * (angle_deg / 360)  # inner circumference * number of rounds
-
-        # Convert arc lengths to wheel rotations
-        outer_rotations = (outer_arc_length_cm * 10) / wheel_circumference_mm  # in rotations
-        inner_rotations = (inner_arc_length_cm * 10) / wheel_circumference_mm  # in rotations
-
-        # Calculate speed ratio
-        if outer_rotations != 0:  # Prevent division by zero
-            speed_ratio = inner_rotations / outer_rotations
-        else:
-            speed_ratio = 0
-
-        # Ensure both motors complete their movements together
-        if radius_cm > 0:  # Turning right
-            self.right_motor.run_angle(speed * speed_ratio, inner_rotations * 360, wait=False)  # Inner wheel
-            self.left_motor.run_angle(speed, outer_rotations * 360, wait=True)  # Outer wheel
-        else:  # Turning left
-            self.left_motor.run_angle(speed * speed_ratio, inner_rotations * 360, wait=False)  # Inner wheel
-            self.right_motor.run_angle(speed, outer_rotations * 360, wait=True)  # Outer wheel
-
-        # Stop the motors
-        self.left_motor.brake()
-        self.right_motor.brake()
-
-        print(f"Completed arc turn: Radius = {radius_cm} cm, Angle = {angle_deg}° (Adjusted for gyro offset).")
-
-    def turn(self, target_angle, speed=150):    
-        # Reset the built-in gyro sensor to 0 (start angle)
-        self.hub.imu.reset_heading(0)
-
-        # Get the current angle
-        current_angle = self.hub.imu.heading()
-
-        # Calculate the difference between target and current angle
-        angle_diff = target_angle - current_angle
-        
-        # If the difference is positive, turn right, if negative, turn left
-        if angle_diff > 0:
-            self.left_motor.run(speed)
-            self.right_motor.run(-speed)
-        else:
-            self.left_motor.run(-speed)
-            self.right_motor.run(speed)
-
-        # Keep turning until we reach the target angle
-        while abs(self.hub.imu.heading() - target_angle) > 2:  # Tolerance of 2 degrees
-            wait(20)  # Wait a little before checking again
-
-        # Stop the motors once we reach the target angle
+    
 
     def wait_for_button(self,debug = True):
         if not debug:
@@ -229,9 +164,7 @@ class Robot:
         stop_at_end=True, 
         timeout_seconds=None, 
         gradual_stop=True, 
-        gradual_stop_distance=10,
         gradual_start=True,
-        gradual_start_distance=10,
     ):
         """
         Drive straight using PID control for the DriveBase based on the drive base angle.
@@ -239,14 +172,14 @@ class Robot:
         :param distance_cm: Distance in centimeters.
         :param speed: Speed in degrees per second.
         :param stop_at_end: Whether to stop the motors when finished.
-        :param timeout_seconds: Timeout for the movement (optional).
+        :param target_speed: Speed in degrees per second.
         """
         # Initialize PID controller
         # p = סטייה עכשיות 
         # i = מתקן לזווית 0
         # d = מחזיר למסלול המקורי
         # pid = PIDController(kp=0.8, ki=0.14, kd=2.25)
-        pid = PIDController(kp=1, ki=0.1, kd=1)
+        pid = PIDController(kp=0.97, ki=0.05, kd=1.82)
         # Initialize the timer
         timer = StopWatch()
         # Calculate the target angle
@@ -286,9 +219,35 @@ class Robot:
                 break
             # Check if the timeout is reached
             if timeout_seconds is not None and timer.time() > timeout_seconds:
-                break
+                break  
             # Wait for the next iteration
             wait(10)
         # Stop the motors
         if stop_at_end:
             self.drive_base.stop()
+    
+    def turn(self, degrees, speed=150):
+        """
+        Turn the robot by a specific number of degrees.
+        Positive values turn clockwise, negative values turn counterclockwise.
+        :param degrees: The number of degrees to turn.
+        :param speed: The speed of the turn.
+        """
+        # Reset the built-in gyro sensor to 0 (start angle)
+        self.hub.imu.reset_heading(0)
+
+        # Determine the direction of the turn
+        if degrees > 0:
+            self.left_motor.run(speed)
+            self.right_motor.run(-speed)
+        else:
+            self.left_motor.run(-speed)
+            self.right_motor.run(speed)
+
+        # Keep turning until we reach the target angle
+        while abs(self.hub.imu.heading() - degrees) > 2:  # Tolerance of 2 degrees
+            wait(20)  # Wait a little before checking again
+
+        # Stop the motors once we reach the target angle
+        self.left_motor.stop()
+        self.right_motor.stop()
