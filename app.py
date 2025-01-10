@@ -5,6 +5,7 @@ from pybricks.parameters import Port
 from pybricks.tools import wait
 from pybricks.parameters import Icon, Color, Button, Direction
 from robot import Robot
+# from pynput import keyboard
 
 ilan=Robot()
 # # Port A - Right color sensor
@@ -73,10 +74,10 @@ def turn():
 
 def whale():
     ilan.drive_straight(20)
-    ilan.motor_back.run_until_stalled(100, duty_limit=50)
-    ilan.run_back_motor(400,-90, wait= False)
+    ilan.run_back_motor(100,100)
+    ilan.run_back_motor(100,-90)
     ilan.wait_for_button()
-    ilan.drive_straight(52)
+    ilan.drive_straight(49)
     ilan.wait_for_button(debug= False)
     ilan.motor_back.run_until_stalled(30, duty_limit=40)
     ilan.motor_back.run_angle(100,-90, wait= False)
@@ -107,24 +108,24 @@ def crabs():
     ilan.drive_back(18,200)
     ilan.arc_turn(90,200)
     ilan.drive_back(22,200)
-    ilan.arc_turn(90,200)
+    # ilan.arc_turn(90,200)
     ilan.drive_back(7,200)
     ilan.motor_back.angle(250,200)
     ilan.drive_straight(8,50)
-    ilan.arc_turn(180,200)
+    # ilan.arc_turn(180,200)
     ilan.drive_straight(60,200)
-    ilan.arc_turn(10,200)
+    # ilan.arc_turn(10,200)
     ilan.drive_straight(10,200)
     
 def test():
-    # ilan.arc_turn(5, 180, 450)
-    # ilan.drive_straight_pid(200,3000)
+    
+    ilan.drive_straight_pid(200,3000)
     # ilan.drive_until_both_on_line()
-    ilan.drive_straight(20,250)
+    # ilan.drive_straight(50,250)
     # wait(1000)
     # ilan.drive_straight(-50,100)
-
-    # ilan.turn(90,150)
+    # exit()
+    # # ilan.turn(90,150)
     # ilan.drive_straight(115,550)
     # ilan.turn(90,150)
     # ilan.drive_straight(75,300)
@@ -173,3 +174,16 @@ while True:
         wait(100)
 
 
+        # def on_press(key):
+        #     global current_run
+        #     try:
+        #         if key.char in [str(i) for i in range(1, len(runs) + 1)]:
+        #             current_run = int(key.char) - 1
+        #             runs[current_run][1]()
+        #         elif key.char == 'q':
+        #             return False  # Stop listener
+        #     except AttributeError:
+        #         pass
+
+        # listener = keyboard.Listener(on_press=on_press)
+        # listener.start()
