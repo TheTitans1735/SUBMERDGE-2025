@@ -50,8 +50,8 @@ class Robot:
         speed=450, 
         timeout_seconds=None,   # TODO: Support drive by seconds
         stop_at_end=True,
-        acceleration_rate=400,
-        deceleration_rate=400,
+        acceleration_rate=100,
+        deceleration_rate=100,
     ):
         self.drive_base.settings(
             straight_speed=speed, 
@@ -71,8 +71,8 @@ class Robot:
         speed=450, 
         timeout_seconds=None,   # TODO: Support drive by seconds
         stop_at_end=True,
-        acceleration_rate=400,
-        deceleration_rate=400,
+        acceleration_rate=100,
+        deceleration_rate=100,
     ):
         self.drive_straight(
             distance_cm=-1*distance_cm, 
