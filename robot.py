@@ -161,6 +161,9 @@ class Robot:
         self, 
         distance_cm, 
         target_speed=450, 
+        kp=0.97,
+        ki=0.05,
+        kd=1.82,
         stop_at_end=True, 
         timeout_seconds=None, 
         gradual_stop=True, 
@@ -180,6 +183,9 @@ class Robot:
         # d = מחזיר למסלול המקורי
         # pid = PIDController(kp=0.8, ki=0.14, kd=2.25)
         pid = PIDController(kp=0.97, ki=0.05, kd=1.82)
+        kp = 0.97
+        ki = 0.05
+        kd = 1.82
         # Initialize the timer
         timer = StopWatch()
         # Calculate the target angle

@@ -22,7 +22,7 @@
             }
         }, 
         {
-            "name": "Run gebetta",
+            "name": "Run.py (gebetta)",
             "type": "debugpy",
             "request": "launch",
             "module": "pybricksdev",
@@ -31,7 +31,7 @@
                 "ble",
                 "--name",
                 "YAHAV",
-                "app.py"
+                "run.py"
             ],
             "console": "integratedTerminal",
             "env": {

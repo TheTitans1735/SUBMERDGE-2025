@@ -37,10 +37,10 @@ async def turn_right():
     await ilan.drive_base.turn(360, wait=False)
 
 async def front_motor():
-    ilan.motor_front.dc(500)
+    ilan.motor_front.dc(5000)
 
 async def back_motor():
-    ilan.motor_back.dc(500)
+    ilan.motor_back.dc(4000)
 
 async def front_motor_reverse():
     ilan.motor_front.dc(-50)
@@ -90,11 +90,14 @@ async def whale():
     await ilan.drive_straight(2,150)
 
 async def sonar():
-    await ilan.drive_back_old(30,300)
-    await ilan.turn(80,200)
-    await ilan.drive_straight_old(13)
-    await ilan.run_back_motor(150,-210)
-    await ilan.drive_back_old(53,10)
+    await ilan.drive_back(30,300)
+    await ilan.turn(90)
+    await ilan.drive_straight(13)
+    await ilan.run_back_motor(50,-120)
+    await ilan.turn(-5)
+
+
+    await ilan.drive_back(53)
     await ilan.run_back_motor(300,-90)
 
 async def crabs():
@@ -135,7 +138,7 @@ async def massive():
     await ilan.drive_back(40,200)
 
 async def test():
-    await ilan.drive_back(90,200)
+    await ilan.drive_straight(-90,200)
 
 # this is the main program
 async def main():
