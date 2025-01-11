@@ -39,6 +39,23 @@
             }
         },
         {
+            "name": "Run app.py",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "pybricksdev",
+            "args": [
+                "run",
+                "ble",
+                "--name",
+                "Ilan Prime",
+                "app.py"
+            ],
+            "console": "integratedTerminal",
+            "env": {
+                "PYTHONUTF8": "1"
+            }
+        },
+        {
             "name": "engine only",
             "type": "debugpy",
             "request": "launch",

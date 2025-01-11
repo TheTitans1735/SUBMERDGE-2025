@@ -31,7 +31,7 @@ while True:
             
             if not motor_a_running:
                 # Start motor A in the current direction
-                motor_a.dc(1000* motor_a_direction)
+                motor_a.dc(50* motor_a_direction)
                 motor_a_running = True
             else:
                 # Stop motor A if it's running
@@ -47,7 +47,7 @@ while True:
             
             if not motor_f_running:
                 # Start motor F in the current direction
-                motor_f.dc(1000* motor_f_direction)
+                motor_f.dc(500* motor_f_direction)
                 motor_f_running = True
             else:
                 # Stop motor F if it's running
