@@ -20,6 +20,23 @@
             "env": {
                 "PYTHONUTF8": "1"
             }
+        }, 
+        {
+            "name": "Run gebetta",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "pybricksdev",
+            "args": [
+                "run",
+                "ble",
+                "--name",
+                "YAHAV",
+                "app.py"
+            ],
+            "console": "integratedTerminal",
+            "env": {
+                "PYTHONUTF8": "1"
+            }
         },
         {
             "name": "engine only",

@@ -23,7 +23,7 @@ class PIDController:
         self.previous_error = 0
         self.integral = 0
 
-    def compute(self, target, current):
+    async def compute(self, target, current):
         error = target - current
         self.integral += error
         derivative = error - self.previous_error
@@ -39,12 +39,12 @@ class Robot:
         self.right_motor = Motor(Port.B)
         self.motor_front = Motor(Port.C)
         self.motor_back = Motor(Port.D)
-        self.drive_base = DriveBase(self.left_motor, self.right_motor,57,11.2) 
+        self.drive_base = DriveBase(self.left_motor, self.right_motor,57,112) 
         self.left_color_sensor = ColorSensor(Port.E)    
         self.right__color_sensor = ColorSensor(Port.A)       
             # self.drive_base.use_gyro(True)
 
-    def drive_straight_old(
+    async def drive_straight_old(
         self,
         distance_cm, 
         speed=450, 
@@ -59,13 +59,13 @@ class Robot:
             turn_rate=None, 
             turn_acceleration=None,
         )
-        self.drive_base.straight(
+        await self.drive_base.straight(
             distance=distance_cm*10,
             then=Stop.HOLD if stop_at_end else Stop.NONE,
             wait=True,
         )
 
-    def drive_back(
+    async def drive_back_old(
         self,
         distance_cm, 
         speed=450, 
@@ -74,7 +74,7 @@ class Robot:
         acceleration_rate=100,
         deceleration_rate=100,
     ):
-        self.drive_straight(
+        await self.drive_straight_old(
             distance_cm=-1*distance_cm, 
             speed=speed,
             timeout_seconds=timeout_seconds,
@@ -83,12 +83,12 @@ class Robot:
             deceleration_rate=deceleration_rate,
         )
 
-    def run_front_motor(self, speed, angle, wait= True):
+    async def run_front_motor(self, speed, angle, wait= True):
 
         self.motor_front.reset_angle(angle=0)
-        self.motor_front.run_target(speed, target_angle=angle, then=Stop.HOLD, wait=wait)
+        await self.motor_front.run_target(speed, target_angle=angle, then=Stop.HOLD, wait=wait)
         
-    def run_back_motor(self, speed, angle, wait=True):
+    async def run_back_motor(self, speed, angle, wait=True):
         """
         Run the back motor to a specific angle at a given speed.
         :param speed: The speed at which to run the motor.
@@ -96,28 +96,28 @@ class Robot:
         :param wait: Whether to wait for the motor to reach the target angle.
         """
         self.motor_back.reset_angle(0)
-        self.motor_back.run_target(speed, angle, then=Stop.HOLD, wait=wait)
+        await self.motor_back.run_target(speed, angle, then=Stop.HOLD, wait=wait)
 
 
 
     
 
-    def wait_for_button(self,debug = True):
+    async def wait_for_button(self,debug = True):
         if not debug:
             return
         self.hub.light.blink(Color.MAGENTA,[1000])
         while not self.hub.buttons.pressed():
-            wait(100)
+            await wait(10)
         self.hub.light.on(Color.BLUE)
     
-    def drive_until_both_on_line(self, threshold=20, speed=200):
+    async def drive_until_both_on_line(self, threshold=20, speed=200):
       
         self.left_motor.run(speed)
         self.right_motor.run(speed)
 
         while True:
-            left_intensity = self.left_color_sensor.reflection()        # קריאת חיישן שמאלי
-            right_intensity = self.right__color_sensor.reflection()     # קריאת חיישן ימני            
+            left_intensity = await self.left_color_sensor.reflection()        # קריאת חיישן שמאלי
+            right_intensity = await self.right__color_sensor.reflection()     # קריאת חיישן ימני            
             print(f"Left: {left_intensity}, Right: {right_intensity}")  # דיבוג
 
             if left_intensity < threshold: 
@@ -130,7 +130,7 @@ class Robot:
                 print("Both sensors detected the line!")
                 break
 
-    def align_to_line(self, threshold=20, speed=100):
+    async def align_to_line(self, threshold=20, speed=100):
         """
         יישור הרובוט כך ששני החיישנים נמצאים על הקו.
         :param threshold: ערך זיהוי הקו.
@@ -157,7 +157,7 @@ class Robot:
                 break
 
 
-    def drive_straight(
+    async def drive_straight(
         self, 
         distance_cm, 
         target_speed=450, 
@@ -198,7 +198,7 @@ class Robot:
             current_angle = self.drive_base.angle()
             current_distance = self.drive_base.distance()
             # Calculate the correction
-            correction = pid.compute(0, current_angle)
+            correction = await pid.compute(0, current_angle)
             # Calculate the speed if gradual start/stop is enabled according to distance
             if abs(current_distance) < target_distance / 2:
                 speed = target_speed
@@ -220,13 +220,82 @@ class Robot:
             # Check if the timeout is reached
             if timeout_seconds is not None and timer.time() > timeout_seconds:
                 break  
-            # Wait for the next iteration
-            wait(10)
+            await wait(10)
         # Stop the motors
         if stop_at_end:
             self.drive_base.stop()
+
+    async def drive_back(
+        self, 
+        distance_cm, 
+        speed=450, 
+        stop_at_end=True, 
+        timeout_seconds=None, 
+        gradual_stop=True, 
+        gradual_start=True,
+    ):
+        """
+        Drive backwards using PID control for the DriveBase based on the drive base angle.
+        :param distance_cm: Distance in centimeters.
+        :param speed: Speed in degrees per second.
+        :param stop_at_end: Whether to stop the motors when finished.
+        """
+        await self.drive_straight(
+            distance_cm=-1*distance_cm, 
+            target_speed=speed, 
+            stop_at_end=stop_at_end, 
+            timeout_seconds=timeout_seconds, 
+            gradual_stop=gradual_stop, 
+            gradual_start=gradual_start,
+        )
+
+    async def arc_turn(self, radius_cm, angle_deg, speed=150):
+        """
+        Moves the robot in an arc with a specified radius (in cm) and angle (in degrees).
+        The radius is measured from the center of the robot to the midpoint between the wheels.
+        """
+        # Robot dimensions
+        wheel_diameter_mm = 57  # Diameter of the wheel in mm
+        axle_track_cm = 11.2  # Distance between the wheels in cm
+        gyro_offset_cm = 3.5  # Distance of gyro from wheel center
+        wheel_circumference_mm = wheel_diameter_mm * 3.14159  # Circumference of the wheel in mm
+
+        # Adjust the radius to account for the gyro's offset
+        effective_radius_cm = radius_cm - gyro_offset_cm
+
+        # Calculate the path lengths for the inner and outer wheels
+        outer_radius_cm = effective_radius_cm + (axle_track_cm / 2)
+        inner_radius_cm = effective_radius_cm - (axle_track_cm / 2)
+
+        # Circumferences of the outer and inner arcs
+        outer_arc_length_cm = (2 * 3.14159 * outer_radius_cm) * (angle_deg / 360)  # outer circumference * number of rounds
+        inner_arc_length_cm = (2 * 3.14159 * inner_radius_cm) * (angle_deg / 360)  # inner circumference * number of rounds
+
+        # Convert arc lengths to wheel rotations
+        outer_rotations = (outer_arc_length_cm * 10) / wheel_circumference_mm  # in rotations
+        inner_rotations = (inner_arc_length_cm * 10) / wheel_circumference_mm  # in rotations
+
+        # Calculate speed ratio
+        if outer_rotations != 0:  # Prevent division by zero
+            speed_ratio = inner_rotations / outer_rotations
+        else:
+            speed_ratio = 0
+
+        # Ensure both motors complete their movements together
+        if radius_cm > 0:  # Turning right
+            await self.right_motor.run_angle(speed * speed_ratio, inner_rotations * 360, wait=False)  # Inner wheel
+            await self.left_motor.run_angle(speed, outer_rotations * 360, wait=True)  # Outer wheel
+        else:  # Turning left
+            await self.left_motor.run_angle(speed * speed_ratio, inner_rotations * 360, wait=False)  # Inner wheel
+            await self.right_motor.run_angle(speed, outer_rotations * 360, wait=True)  # Outer wheel
+
+        self.left_motor.brake()
+        self.right_motor.brake()
+
+        print(f"Completed arc turn: Radius = {radius_cm} cm, Angle = {angle_deg}° (Adjusted for gyro offset).")
+
     
-    def turn(self, degrees, speed=150):
+    async def turn(self, degrees, speed=150):
         """
         Turn the robot by a specific number of degrees.
         Positive values turn clockwise, negative values turn counterclockwise.
@@ -246,8 +315,9 @@ class Robot:
 
         # Keep turning until we reach the target angle
         while abs(self.hub.imu.heading() - degrees) > 2:  # Tolerance of 2 degrees
-            wait(20)  # Wait a little before checking again
+            await wait(20) # Wait a little before checking again
 
         # Stop the motors once we reach the target angle
         self.left_motor.stop()
         self.right_motor.stop()
+
