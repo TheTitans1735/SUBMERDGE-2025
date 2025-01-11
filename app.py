@@ -43,7 +43,7 @@ def back_motor():
     ilan.motor_back.dc(500)
 
 def front_motor_reverse():
-    ilan.motor_front.dc(-50)
+    ilan.motor_front.dc(-500)
     
 def back_motor_reverse():
     ilan.motor_back.dc(-500)
@@ -110,12 +110,52 @@ def crabs():
     ilan.drive_back(22,200)
     # ilan.arc_turn(90,200)
     ilan.drive_back(7,200)
-    ilan.motor_back.angle(250,200)
+    ilan.motor_back.run_angle(250,200)
     ilan.drive_straight(8,50)
     # ilan.arc_turn(180,200)
     ilan.drive_straight(60,200)
     # ilan.arc_turn(10,200)
     ilan.drive_straight(10,200)
+    
+def banana():
+    ilan.drive_straight(40,400)
+    ilan.drive_back(20,200)
+    ilan.arc_turn(35,300)
+    ilan.motor_back.run_angle(60,200)
+    ilan .drive_straight(4,200)
+    ilan.arc_turn(12,200)
+    ilan.drive_straight(10,200)
+    ilan.arc_turn(7,200)
+    ilan.drive_straight(11,200)
+    ilan.arc_turn(10,200)
+    ilan.drive_straight(3,200)
+    ilan.motor_front.run_angle(-60,200)
+    ilan.drive_back(10,200)
+    ilan.arc_turn(-25,200)
+    ilan.drive_back(5,200)
+    ilan.motor_back.run_angle(40)
+    ilan.drive_back(8,200)
+    
+    
+def chest(): 
+    ilan.drive_back(68,200)
+    ilan.arc_turn(90,200)
+    ilan.drive_back(17,200)
+    ilan.arc_turn(-90,200)
+    ilan.drive_back(9,200)
+    ilan.motor_back.run_angle(-150,200)
+    ilan.motor_back.run_angle(150,200)
+    ilan.arc_turn(10,200)
+    ilan.drive_straight(21,200)
+    ilan.arc_turn(-100,200)
+    ilan.drive_straight(6,200)
+    ilan.motor_front.run_angle(150,200)
+    ilan.motor_front.run_angle(-150,200)
+    ilan.drive_back(20,200)
+    ilan.arc_turn(90,200)
+    ilan.drive_straight(40,200)
+
+
     
 def test():
     
@@ -145,6 +185,7 @@ runs = [
     ("7",whale, Icon.FULL),
     ("T", test),
     ("8", sonar,Icon.HEART),
+    ("9", banana, Icon.TRUE),
 ]
 current_run = 0
 print("current", ilan.hub.battery.current(), "voltage", ilan.hub.battery.voltage())
