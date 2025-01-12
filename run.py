@@ -131,7 +131,7 @@ async def massive():
     await ilan.drive_back(40,200)
 
 async def test():
-        await multitask(ilan.drive_straight(18,100), ilan.motor_back.run_angle(75,132))
+        await multitask(ilan.drive_straight(17,100), ilan.motor_back.run_angle(150,132))
 
 #       await ilan.arc_turn(100,90)
 # async def play_sound():
