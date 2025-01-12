@@ -95,10 +95,27 @@ async def sonar():
     await ilan.drive_straight(13)
     await ilan.run_back_motor(50,-120)
     await ilan.turn(-5)
-
-
     await ilan.drive_back(53)
     await ilan.run_back_motor(300,-90)
+
+def banana():
+    ilan.drive_straight(40,400)
+    ilan.drive_back(20,200)
+    ilan.arc_turn(35,300)
+    ilan.motor_back.run_angle(60,200)
+    ilan .drive_straight(4,200)
+    ilan.arc_turn(12,200)
+    ilan.drive_straight(10,200)
+    ilan.arc_turn(7,200)
+    ilan.drive_straight(11,200)
+    ilan.arc_turn(10,200)
+    ilan.drive_straight(3,200)
+    ilan.motor_front.run_angle(-60,200)
+    ilan.drive_back(10,200)
+    ilan.arc_turn(-25,200)
+    ilan.drive_back(5,200)
+    ilan.motor_back.run_angle(40)
+    ilan.drive_back(8,200)
 
 async def crabs():
     await ilan.drive_straight(-113,200)
