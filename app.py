@@ -98,20 +98,16 @@ async def sonar():
     await ilan.run_back_motor(300,-90)
 
 async def crabs():
-    await ilan.drive_back(89,200)
-    await ilan.drive_straight(-90,200)
-    await ilan.arc_turn(20,200)
-    await ilan.drive_straight(12,200)
-    await ilan.arc_turn(-90,200)
-    await ilan.drive_straight(39,200)
-    await ilan.drive_back(18,200)
-    await ilan.arc_turn(90,200)
-    await ilan.drive_back(22,200)
-    await ilan.drive_back(7,200)
-    await ilan.motor_back.run_angle(250,200)
-    await ilan.drive_straight(8,50)
-    await ilan.drive_straight(60,200)
-    await ilan.drive_straight(10,200)
+    await ilan.drive_straight(-60)
+    await ilan.turn(20)
+    await ilan.drive_straight(-22)
+    await ilan.run_back_motor(200,150)
+    await ilan.drive_straight(10)
+    await ilan.turn(90)
+    await ilan.drive_straight(20)
+    await ilan.turn(-90)
+    await ilan.drive_straight(-90)
+    
 
 async def massive():
     await ilan.drive_straight(40,200)

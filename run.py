@@ -101,14 +101,16 @@ async def sonar():
     await ilan.run_back_motor(300,-90)
 
 async def crabs():
-    await ilan.drive_straight(-113,200)
-    await ilan.drive_straight(29,200)
-    await ilan.motor_back.run_angle(250,)
-    await ilan.drive_straight(8,200)
-    await ilan.turn(180,200)
-    await ilan.drive_straight(-9,200)
-    await ilan.turn(10,200)
-    await ilan.drive_straight(-90,200)
+    await ilan.drive_straight(60)
+    await ilan.turn(5)
+    await ilan.drive_straight(-22)
+    await ilan.run_back_motor(200,150)
+    await ilan.drive_straight(10)
+    await ilan.turn(90)
+    await ilan.drive_straight(20)
+    await ilan.turn(-90)
+    await ilan.drive_straight(-90)
+
 async def massive():
     await ilan.drive_straight(40,200)
     await ilan.wait_for_button()
@@ -131,7 +133,8 @@ async def massive():
     await ilan.drive_back(40,200)
 
 async def test():
-        await multitask(ilan.drive_straight(17,100), ilan.motor_back.run_angle(150,132))
+        await multitask(ilan.drive_straight(15,100), ilan.motor_back.run_angle(250,145))
+        await ilan.drive_straight(0.5)
 
 #       await ilan.arc_turn(100,90)
 # async def play_sound():
