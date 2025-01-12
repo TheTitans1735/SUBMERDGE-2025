@@ -43,7 +43,7 @@ async def back_motor():
     ilan.motor_back.dc(4000)
 
 async def front_motor_reverse():
-    ilan.motor_front.dc(-50)
+    ilan.motor_front.dc(-4000)
     
 async def back_motor_reverse():
     ilan.motor_back.dc(-500)
@@ -138,8 +138,9 @@ async def massive():
     await ilan.drive_back(40,200)
 
 async def test():
-    await ilan.drive_straight(-90,200)
-
+    await ilan.drive_straight(distance_cm=100,target_speed=350,gradual_start=False,gradual_stop=False)
+    # await ilan.turn(37)
+    # await ilan.drive_until_both_on_line(speed=400)
 # this is the main program
 async def main():
     runs = [
