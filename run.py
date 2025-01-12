@@ -43,7 +43,7 @@ async def back_motor():
     ilan.motor_back.dc(4000)
 
 async def front_motor_reverse():
-    ilan.motor_front.dc(-4000)
+    ilan.motor_front.dc(-50)
     
 async def back_motor_reverse():
     ilan.motor_back.dc(-500)
@@ -85,7 +85,7 @@ async def whale():
     await ilan.turn(40)
     await ilan.wait_for_button(debug=False)
     await ilan.drive_straight(14,100)
-    await ilan.drive_back(2,150)
+    await ilan.drive_straight(-2,150)
     await ilan.drive_until_both_on_line()
     await ilan.drive_straight(2,150)
 
@@ -101,21 +101,14 @@ async def sonar():
     await ilan.run_back_motor(300,-90)
 
 async def crabs():
-    await ilan.drive_back(89,200)
+    await ilan.drive_straight(-113,200)
+    await ilan.drive_straight(29,200)
+    await ilan.motor_back.run_angle(250,)
+    await ilan.drive_straight(8,200)
+    await ilan.turn(180,200)
+    await ilan.drive_straight(-9,200)
+    await ilan.turn(10,200)
     await ilan.drive_straight(-90,200)
-    await ilan.arc_turn(20,200)
-    await ilan.drive_straight(12,200)
-    await ilan.arc_turn(-90,200)
-    await ilan.drive_straight(39,200)
-    await ilan.drive_back(18,200)
-    await ilan.arc_turn(90,200)
-    await ilan.drive_back(22,200)
-    await ilan.drive_back(7,200)
-    await ilan.motor_back.run_angle(250,200)
-    await ilan.drive_straight(8,50)
-    await ilan.drive_straight(60,200)
-    await ilan.drive_straight(10,200)
-
 async def massive():
     await ilan.drive_straight(40,200)
     await ilan.wait_for_button()
@@ -138,9 +131,22 @@ async def massive():
     await ilan.drive_back(40,200)
 
 async def test():
-    await ilan.drive_straight(distance_cm=100,target_speed=350,gradual_start=False,gradual_stop=False)
-    # await ilan.turn(37)
-    # await ilan.drive_until_both_on_line(speed=400)
+        await multitask(ilan.drive_straight(18,100), ilan.motor_back.run_angle(75,132))
+
+#       await ilan.arc_turn(100,90)
+# async def play_sound():
+        # await ilan.hub.speaker.beep(1000, 500)
+            # async def play_sound():
+            #     notes = [
+            #         (1000, 500), (1200, 500), (1400, 500), (1600, 500),
+            #         (1800, 500), (2000, 500), (2200, 500), (2400, 500)
+            #     ]
+            #     for frequency, duration in notes:
+            #         ilan.hub.speaker.beep(frequency, duration)
+            #         await wait(duration)
+            # await play_sound()
+
+        # Add your hardware update logic here
 # this is the main program
 async def main():
     runs = [
@@ -155,10 +161,11 @@ async def main():
         ("5", nigg, Icon.CIRCLE),
         ("6", turn, Icon.CLOCKWISE),
         ("crabs", crabs, Icon.HAPPY),
-        ("7",whale, Icon.FULL),
+        ("7",whale, Icon.SAD),
         ("T", test),
         ("8", sonar,Icon.HEART),
         ("1", massive, Icon.LEFT),
+        # ("9", play_sound)
     ]
     current_run = 0
     print("current", ilan.hub.battery.current(), "voltage", ilan.hub.battery.voltage())

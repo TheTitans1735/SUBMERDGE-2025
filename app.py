@@ -24,7 +24,7 @@ ilan=Robot()
 
 
 async def drive():   
-    ilan.drive_base.drive(151,0)
+    ilan.drive_base.drive(100,0)
 
 
 async def reverse_drive():
@@ -135,9 +135,10 @@ async def massive():
     await ilan.drive_back(40,200)
 
 async def test():
-    await ilan.drive_straight(20,200)
-    await ilan.wait_for_button()
-    await ilan.drive_straight(-20,200)
+    await multitask(ilan.drive_straight(16,100), ilan.motor_back.run_angle(75,128))
+    # await ilan.drive_straight(-20,200)
+    await ilan.motor_back.run_angle(75,128)
+    exit()
 
 # this is the main program
 async def main():

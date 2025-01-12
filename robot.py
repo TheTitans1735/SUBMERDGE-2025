@@ -251,50 +251,50 @@ class Robot:
     #         gradual_start=gradual_start,
     #     )
 
-    async def arc_turn(self, radius_cm, angle_deg, speed=150):
-        """
-        Moves the robot in an arc with a specified radius (in cm) and angle (in degrees).
-        The radius is measured from the center of the robot to the midpoint between the wheels.
-        """
-        # Robot dimensions
-        wheel_diameter_mm = 57  # Diameter of the wheel in mm
-        axle_track_cm = 11.2  # Distance between the wheels in cm
-        gyro_offset_cm = 3.5  # Distance of gyro from wheel center
-        wheel_circumference_mm = wheel_diameter_mm * 3.14159  # Circumference of the wheel in mm
+    # async def arc_turn(self, radius_cm, angle_deg, speed=150):
+    #     """
+    #     Moves the robot in an arc with a specified radius (in cm) and angle (in degrees).
+    #     The radius is measured from the center of the robot to the midpoint between the wheels.
+    #     """
+    #     # Robot dimensions
+    #     wheel_diameter_mm = 57  # Diameter of the wheel in mm
+    #     axle_track_cm = 11.2  # Distance between the wheels in cm
+    #     gyro_offset_cm = 3.5  # Distance of gyro from wheel center
+    #     wheel_circumference_mm = wheel_diameter_mm * 3.14159  # Circumference of the wheel in mm
 
-        # Adjust the radius to account for the gyro's offset
-        effective_radius_cm = radius_cm - gyro_offset_cm
+    #     # Adjust the radius to account for the gyro's offset
+    #     effective_radius_cm = radius_cm - gyro_offset_cm
 
-        # Calculate the path lengths for the inner and outer wheels
-        outer_radius_cm = effective_radius_cm + (axle_track_cm / 2)
-        inner_radius_cm = effective_radius_cm - (axle_track_cm / 2)
+    #     # Calculate the path lengths for the inner and outer wheels
+    #     outer_radius_cm = effective_radius_cm + (axle_track_cm / 2)
+    #     inner_radius_cm = effective_radius_cm - (axle_track_cm / 2)
 
-        # Circumferences of the outer and inner arcs
-        outer_arc_length_cm = (2 * 3.14159 * outer_radius_cm) * (angle_deg / 360)  # outer circumference * number of rounds
-        inner_arc_length_cm = (2 * 3.14159 * inner_radius_cm) * (angle_deg / 360)  # inner circumference * number of rounds
+    #     # Circumferences of the outer and inner arcs
+    #     outer_arc_length_cm = (2 * 3.14159 * outer_radius_cm) * (angle_deg / 360)  # outer circumference * number of rounds
+    #     inner_arc_length_cm = (2 * 3.14159 * inner_radius_cm) * (angle_deg / 360)  # inner circumference * number of rounds
 
-        # Convert arc lengths to wheel rotations
-        outer_rotations = (outer_arc_length_cm * 10) / wheel_circumference_mm  # in rotations
-        inner_rotations = (inner_arc_length_cm * 10) / wheel_circumference_mm  # in rotations
+    #     # Convert arc lengths to wheel rotations
+    #     outer_rotations = (outer_arc_length_cm * 10) / wheel_circumference_mm  # in rotations
+    #     inner_rotations = (inner_arc_length_cm * 10) / wheel_circumference_mm  # in rotations
 
-        # Calculate speed ratio
-        if outer_rotations != 0:  # Prevent division by zero
-            speed_ratio = inner_rotations / outer_rotations
-        else:
-            speed_ratio = 0
+    #     # Calculate speed ratio
+    #     if outer_rotations != 0:  # Prevent division by zero
+    #         speed_ratio = inner_rotations / outer_rotations
+    #     else:
+    #         speed_ratio = 0
 
-        # Ensure both motors complete their movements together
-        if radius_cm > 0:  # Turning right
-            await self.right_motor.run_angle(speed * speed_ratio, inner_rotations * 360, wait=False)  # Inner wheel
-            await self.left_motor.run_angle(speed, outer_rotations * 360, wait=True)  # Outer wheel
-        else:  # Turning left
-            await self.left_motor.run_angle(speed * speed_ratio, inner_rotations * 360, wait=False)  # Inner wheel
-            await self.right_motor.run_angle(speed, outer_rotations * 360, wait=True)  # Outer wheel
+    #     # Ensure both motors complete their movements together
+    #     if radius_cm > 0:  # Turning right
+    #         await self.right_motor.run_angle(speed * speed_ratio, inner_rotations * 360, wait=False)  # Inner wheel
+    #         await self.left_motor.run_angle(speed, outer_rotations * 360, wait=True)  # Outer wheel
+    #     else:  # Turning left
+    #         await self.left_motor.run_angle(speed * speed_ratio, inner_rotations * 360, wait=False)  # Inner wheel
+    #         await self.right_motor.run_angle(speed, outer_rotations * 360, wait=True)  # Outer wheel
 
-        self.left_motor.brake()
-        self.right_motor.brake()
+    #     self.left_motor.brake()
+    #     self.right_motor.brake()
 
-        print(f"Completed arc turn: Radius = {radius_cm} cm, Angle = {angle_deg}° (Adjusted for gyro offset).")
+    #     print(f"Completed arc turn: Radius = {radius_cm} cm, Angle = {angle_deg}° (Adjusted for gyro offset).")
 
     
     async def turn(self, degrees, speed=150):
@@ -322,4 +322,49 @@ class Robot:
         # Stop the motors once we reach the target angle
         self.left_motor.stop()
         self.right_motor.stop()
+
+    async def arc_turn_with_distance(self, radius_cm, angle_deg, distance_cm, speed=150):
+        """
+        Moves the robot in an arc with a specified radius (in cm), angle (in degrees), and distance (in cm).
+        The radius is measured from the center of the robot to the midpoint between the wheels.
+        """
+        # Calculate the total arc length for the given distance
+        total_arc_length_cm = (2 * 3.14159 * radius_cm) * (angle_deg / 360)
+        
+        # Calculate the number of segments to divide the arc into
+        num_segments = int(distance_cm / total_arc_length_cm)
+        
+        for _ in range(num_segments):
+            await self.arc_turn(radius_cm, angle_deg, speed)
+        
+        # Calculate the remaining distance and turn
+        remaining_distance_cm = distance_cm % total_arc_length_cm
+        remaining_angle_deg = (remaining_distance_cm / total_arc_length_cm) * angle_deg
+        
+        await self.arc_turn(radius_cm, remaining_angle_deg, speed)
+
+
+    async def drive_with_turn(self, distance_cm, turn_rate, speed=150):
+            """
+            Drive the robot forward while turning at a specified rate.
+            :param distance_cm: The distance to drive in centimeters.
+            :param turn_rate: The rate of turn in degrees per second.
+            :param speed: The speed of the drive in degrees per second.
+            """
+            # Calculate the target distance in millimeters
+            target_distance_mm = distance_cm * 10
+            
+            # Reset the drive base
+            self.drive_base.reset()
+            
+            # Drive while turning until the target distance is reached
+            while abs(self.drive_base.distance()) < abs(target_distance_mm):
+                self.drive_base.drive(speed, turn_rate)
+                await wait(10)
+            
+            # Stop the drive base
+            self.drive_base.stop()
+            
+
+
 
