@@ -82,9 +82,9 @@ async def whale():
     # await ilan.drive_straight(46)
     await multitask(ilan.drive_straight(70), prepare_whale_motor())
     await ilan.wait_for_button(debug=False)
-    await ilan.turn(40)
+    await ilan.turn(45)
     await ilan.wait_for_button(debug=False)
-    await ilan.drive_straight(14,100)
+    await ilan.drive_straight(17,100)
     await ilan.drive_back(2,150)
     await ilan.drive_until_both_on_line()
     await ilan.drive_straight(2,150)
@@ -96,6 +96,25 @@ async def sonar():
     await ilan.run_back_motor(150,-210)
     await ilan.drive_back_old(53,10)
     await ilan.run_back_motor(300,-90)
+
+def banana():
+    ilan.drive_straight(40,400)
+    ilan.drive_back(20,200)
+    ilan.arc_turn(35,300)
+    ilan.motor_back.run_angle(60,200)
+    ilan .drive_straight(4,200)
+    ilan.arc_turn(12,200)
+    ilan.drive_straight(10,200)
+    ilan.arc_turn(7,200)
+    ilan.drive_straight(11,200)
+    ilan.arc_turn(10,200)
+    ilan.drive_straight(3,200)
+    ilan.motor_front.run_angle(-60,200)
+    ilan.drive_back(10,200)
+    ilan.arc_turn(-25,200)
+    ilan.drive_back(5,200)
+    ilan.motor_back.run_angle(40)
+    ilan.drive_back(8,200)
 
 async def crabs():
     await ilan.drive_straight(-60)
@@ -154,6 +173,7 @@ async def main():
         ("T", test),
         ("8", sonar,Icon.HEART),
         ("1", massive, Icon.LEFT),
+        ("2", banana, Icon.SAD)
     ]
     current_run = 0
     print("current", ilan.hub.battery.current(), "voltage", ilan.hub.battery.voltage())
