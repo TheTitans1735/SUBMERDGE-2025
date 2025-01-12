@@ -161,9 +161,6 @@ class Robot:
         self, 
         distance_cm, 
         target_speed=450, 
-        kp=0.97,
-        ki=0.05,
-        kd=1.82,
         stop_at_end=True, 
         timeout_seconds=None, 
         gradual_stop=True, 
@@ -179,10 +176,9 @@ class Robot:
         """
         # Initialize PID controller
         # p = סטייה עכשיות 
-        # i = מתקן לזווית 0
+        # i = מתקן לזווית 0``
         # d = מחזיר למסלול המקורי
-        # pid = PIDController(kp=0.8, ki=0.14, kd=2.25)
-        pid = PIDController(kp=0.97, ki=0.05, kd=1.82)
+        pid = PIDController(kp=1, ki=0.13, kd=2.2)        # pid = PIDController(kp=0.97, ki=0.05, kd=1.82)
         kp = 0.97
         ki = 0.05
         kd = 1.82
@@ -226,34 +222,34 @@ class Robot:
             # Check if the timeout is reached
             if timeout_seconds is not None and timer.time() > timeout_seconds:
                 break  
-            await wait(10)
+            await wait(1)
         # Stop the motors
         if stop_at_end:
             self.drive_base.stop()
 
-    async def drive_back(
-        self, 
-        distance_cm, 
-        speed=450, 
-        stop_at_end=True, 
-        timeout_seconds=None, 
-        gradual_stop=True, 
-        gradual_start=True,
-    ):
-        """
-        Drive backwards using PID control for the DriveBase based on the drive base angle.
-        :param distance_cm: Distance in centimeters.
-        :param speed: Speed in degrees per second.
-        :param stop_at_end: Whether to stop the motors when finished.
-        """
-        await self.drive_straight(
-            distance_cm=-1*distance_cm, 
-            target_speed=speed, 
-            stop_at_end=stop_at_end, 
-            timeout_seconds=timeout_seconds, 
-            gradual_stop=gradual_stop, 
-            gradual_start=gradual_start,
-        )
+    # async def drive_back(
+    #     self, 
+    #     distance_cm, 
+    #     speed=450, 
+    #     stop_at_end=True, 
+    #     timeout_seconds=None, 
+    #     gradual_stop=True, 
+    #     gradual_start=True,
+    # ):
+    #     """
+    #     Drive backwards using PID control for the DriveBase based on the drive base angle.
+    #     :param distance_cm: Distance in centimeters.
+    #     :param speed: Speed in degrees per second.
+    #     :param stop_at_end: Whether to stop the motors when finished.
+    #     """
+    #     await self.drive_straight(
+    #         distance_cm=-1*distance_cm, 
+    #         target_speed=speed, 
+    #         stop_at_end=stop_at_end, 
+    #         timeout_seconds=timeout_seconds, 
+    #         gradual_stop=gradual_stop, 
+    #         gradual_start=gradual_start,
+    #     )
 
     async def arc_turn(self, radius_cm, angle_deg, speed=150):
         """

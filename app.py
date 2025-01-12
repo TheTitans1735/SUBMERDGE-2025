@@ -135,7 +135,9 @@ async def massive():
     await ilan.drive_back(40,200)
 
 async def test():
-    await ilan.drive_back(90,200)
+    await ilan.drive_straight(20,200)
+    await ilan.wait_for_button()
+    await ilan.drive_straight(-20,200)
 
 # this is the main program
 async def main():
