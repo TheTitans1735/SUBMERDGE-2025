@@ -90,11 +90,11 @@ async def whale():
     await ilan.drive_straight(2,150)
 
 async def sonar():
-    await ilan.drive_back_old(30,300)
+    await ilan.drive_straight(-30,300)
     await ilan.turn(80,200)
-    await ilan.drive_straight_old(13)
+    await ilan.drive_straight(-13)
     await ilan.run_back_motor(150,-210)
-    await ilan.drive_back_old(53,10)
+    await ilan.drive_straight(-53,10)
     await ilan.run_back_motor(300,-90)
 
 def banana():

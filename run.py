@@ -66,7 +66,7 @@ async def nigg():
 async def turn():
     await ilan.turn(90,150)
     await ilan.wait_for_button(True)
-    await wait(1000)
+    await wait(1000) 
     await ilan.turn(-90, 150)
 
 async def prepare_whale_motor():
@@ -90,12 +90,12 @@ async def whale():
     await ilan.drive_straight(2,150)
 
 async def sonar():
-    await ilan.drive_back(30,300)
+    await ilan.drive_straight(-30,300)
     await ilan.turn(90)
     await ilan.drive_straight(13)
     await ilan.run_back_motor(50,-120)
     await ilan.turn(-5)
-    await ilan.drive_back(53)
+    await ilan.drive_straight(-53)
     await ilan.run_back_motor(300,-90)
 
 def banana():
