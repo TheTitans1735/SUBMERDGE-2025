@@ -80,22 +80,24 @@ async def whale():
     # await ilan.run_back_motor(100,-290)
     # await ilan.wait_for_button()
     # await ilan.drive_straight(46)
-    await multitask(ilan.drive_straight(69), prepare_whale_motor())
-    await ilan.wait_for_button(debug=False)
-    await ilan.turn(35)
-    await ilan.wait_for_button(debug=False)
-    await ilan.drive_straight(14,100)
-    await ilan.drive_straight(-2,150)
-    await ilan.drive_straight(7)
-    await multitask(ilan.drive_straight(-2,150), ilan.motor_back.run_angle(250,-290))
-    await ilan.drive_straight(-27)
-    await ilan.turn(22)
+    # await multitask(ilan.drive_straight(69), prepare_whale_motor())
+    # await ilan.wait_for_button(debug=False)
+    # await ilan.turn(35)
+    # await ilan.wait_for_button(debug=False)
+    # await ilan.drive_straight(14,100)
+    # await wait(1000)
+    # await ilan.drive_straight(-2,150)
+    # await ilan.drive_straight(7)
+    await multitask(ilan.drive_straight(-29,150), ilan.motor_back.run_angle(250,-290))
+    await ilan.turn(106)
     await ilan.motor_back.run_angle(250,90)
+    await ilan.motor_back.run_angle(80,80)
     await ilan.drive_straight(-40,200)
     await ilan.turn(14)
-    await ilan.drive_straight(8)
-    await ilan.drive_straight(-9)
+    # await ilan.drive_straight(8)
+    await multitask(ilan.drive_straight(-9))
     await ilan.run_back_motor(200, 120)
+
 async def sonar():
     await ilan.drive_straight(-30,300)
     await ilan.turn(90)
@@ -197,6 +199,7 @@ async def main():
     ]
     current_run = 0
     print("current", ilan.hub.battery.current(), "voltage", ilan.hub.battery.voltage())
+    
             
     while True:
         try:

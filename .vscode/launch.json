@@ -78,10 +78,10 @@
             "request": "launch",
             "module": "pybricksdev",
             "args": [
-                "run",
-                "ble",
-                "--name",
-                "Ilan Prime",
+                // "run",
+                // "ble",
+                // "--name",
+                // "Ilan Prime",
                 "test.py"
             ],
             "console": "integratedTerminal",
