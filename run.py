@@ -37,7 +37,7 @@ async def turn_right():
     await ilan.drive_base.turn(360, wait=False)
 
 async def front_motor():
-    ilan.motor_front.dc(5000)
+    ilan.motor_front.dc(1000)
 
 async def back_motor():
     ilan.motor_back.dc(4000)
@@ -76,18 +76,19 @@ async def prepare_whale_motor():
 
 async def whale_unt_sonar():
     
-    await multitask(ilan.drive_straight(674), prepare_whale_motor())
+    await multitask(ilan.drive_straight(67,450), prepare_whale_motor())
     await ilan.wait_for_button(debug=False)
     await ilan.turn(35)
     await ilan.wait_for_button(debug=False)
-    await ilan.drive_straight(14,100)
+    await ilan.drive_straight(10,150,gradual_start= True)
+    # await ilan.drive_until_both_on_line()
     await wait(1000)
     await ilan.drive_straight(-2,150)
-    await ilan.drive_straight(7)
-    await multitask(ilan.drive_straight(-29,300), ilan.motor_back.run_angle(250,-290))
-    await ilan.turn(110)
-    await ilan.motor_back.run_angle(150,270)
-    await ilan.drive_straight(-23,200)
+    await ilan.drive_straight(7,300)
+    await multitask(ilan.drive_straight(-27,300), ilan.motor_back.run_angle(250,-290))
+    await ilan.turn(120)
+    await ilan.motor_back.run_angle(150,245)
+    await ilan.drive_straight(-35,200)
     await ilan.run_back_motor(200, -100)
     # await ilan.wait_for_button()
     await multitask(ilan.drive_straight(9))
@@ -103,33 +104,30 @@ async def sonar():
 
 def banana():
     ilan.drive_straight(40,400)
-    ilan.drive_back(20,200)
-    ilan.arc_turn(35,300)
+    ilan.drive_straight(-20,200)
+    ilan.turn(35,300)
     ilan.motor_back.run_angle(60,200)
     ilan .drive_straight(4,200)
-    ilan.arc_turn(12,200)
+    ilan.turn(12,200)
     ilan.drive_straight(10,200)
-    ilan.arc_turn(7,200)
+    ilan.turn(7,200)
     ilan.drive_straight(11,200)
-    ilan.arc_turn(10,200)
+    ilan.turn(10,200)
     ilan.drive_straight(3,200)
     ilan.motor_front.run_angle(-60,200)
-    ilan.drive_back(10,200)
-    ilan.arc_turn(-25,200)
-    ilan.drive_back(5,200)
-    ilan.motor_back.run_angle(40)
-    ilan.drive_back(8,200)
+    ilan.drive_straight(-10,200)
+    ilan.turn(-25,200)
+    ilan.drive_straight(-5,200)
+    ilan.motor_back.run_angle(100,40)
+    ilan.drive_straight(-8,200)
 
 async def crabs():
-    await ilan.drive_straight(60)
-    await ilan.turn(5)
-    await ilan.drive_straight(-22)
-    await ilan.run_back_motor(200,150)
-    await ilan.drive_straight(10)
-    await ilan.turn(90)
-    await ilan.drive_straight(20)
-    await ilan.turn(-90)
-    await ilan.drive_straight(-90)
+    # await ilan.run_back_motor(-200,200)
+    await ilan.drive_straight(-97, 700, gradual_start=False)
+    await ilan.run_back_motor(200,350)
+    await ilan.drive_straight(11,220)
+    await ilan.drive_straight(30,700)
+    await ilan.turn(20, 300)
 
 async def massive():
     await ilan.drive_straight(40,200)
@@ -154,10 +152,10 @@ async def massive():
 
 async def test():
 
-
-        await multitask(ilan.drive_straight(15,90), ilan.motor_back.run_angle(230,162))
-        # await wait(10)
-        await ilan.drive_straight(2)
+    await ilan.drive_with_turn(50,90)
+        # await multitask(ilan.drive_straight(15,90), ilan.motor_back.run_angle(230,162))
+        # # await wait(10)
+        # await ilan.drive_straight(2)
 
 #       await ilan.arc_turn(100,90)
 # async def play_sound():
@@ -191,6 +189,7 @@ async def main():
         ("T", test),
         ("8", sonar,Icon.HEART),
         ("1", massive, Icon.LEFT),
+        ("2", banana, Icon.FALSE),
         # ("9", play_sound)
     ]
     current_run = 0
@@ -224,16 +223,4 @@ async def main():
 
 run_task(main())
 
-
-class Timer:
-    def __init__(self):
-        self.start_time = None
-        self.end_time = None
-
-    def start(self):
-        self.start_time = StopWatch()
-
-    def stop(self):
-        self.end_time = self.start_time.time()
-        return self.end_time
 

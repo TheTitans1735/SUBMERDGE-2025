@@ -368,3 +368,23 @@ class Robot:
 
 
 
+    async def drive_with_turn(self, distance_cm, turn_rate, speed=150):
+        """
+        Drive the robot forward while turning at a specified rate.
+        :param distance_cm: The distance to drive in centimeters.
+        :param turn_rate: The rate of turn in degrees per second.
+        :param speed: The speed of the drive in degrees per second.
+        """
+        # Calculate the target distance in millimeters
+        target_distance_mm = distance_cm * 10
+        
+        # Reset the drive base
+        self.drive_base.reset()
+        
+        # Drive while turning until the target distance is reached
+        while abs(self.drive_base.distance()) < abs(target_distance_mm):
+            self.drive_base.drive(speed, turn_rate)
+            await wait(10)
+        
+        # Stop the drive base
+        self.drive_base.stop()
