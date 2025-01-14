@@ -76,7 +76,7 @@ async def prepare_whale_motor():
 
 async def whale_unt_sonar():
     
-    await multitask(ilan.drive_straight(674), prepare_whale_motor())
+    await multitask(ilan.drive_straight(74), prepare_whale_motor())
     await ilan.wait_for_button(debug=False)
     await ilan.turn(35)
     await ilan.wait_for_button(debug=False)
@@ -154,26 +154,9 @@ async def massive():
 
 async def test():
 
-
-        await multitask(ilan.drive_straight(15,90), ilan.motor_back.run_angle(230,162))
-        # await wait(10)
-        await ilan.drive_straight(2)
-
-#       await ilan.arc_turn(100,90)
-# async def play_sound():
-        # await ilan.hub.speaker.beep(1000, 500)
-            # async def play_sound():
-            #     notes = [
-            #         (1000, 500), (1200, 500), (1400, 500), (1600, 500),
-            #         (1800, 500), (2000, 500), (2200, 500), (2400, 500)
-            #     ]
-            #     for frequency, duration in notes:
-            #         ilan.hub.speaker.beep(frequency, duration)
-            #         await wait(duration)
-            # await play_sound()
-
-        # Add your hardware update logic here
-# this is the main program
+    await ilan.drive_straight(10,200)
+    await ilan.motor_front.run_angle(150,90)
+    await ilan.drive_straight(2)
 async def main():
     runs = [
         ("5", drive, Icon.ARROW_LEFT),
