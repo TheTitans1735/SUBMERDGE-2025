@@ -74,28 +74,24 @@ async def prepare_whale_motor():
     # await wait(1000)
     await ilan.run_back_motor(200,-290)
 
-async def whale():
-    # await ilan.drive_straight(20)
-    # await ilan.run_back_motor(100,100)
-    # await ilan.run_back_motor(100,-290)
-    # await ilan.wait_for_button()
-    # await ilan.drive_straight(46)
-    await multitask(ilan.drive_straight(69), prepare_whale_motor())
+async def whale_unt_sonar():
+    
+    await multitask(ilan.drive_straight(674), prepare_whale_motor())
     await ilan.wait_for_button(debug=False)
     await ilan.turn(35)
     await ilan.wait_for_button(debug=False)
     await ilan.drive_straight(14,100)
+    await wait(1000)
     await ilan.drive_straight(-2,150)
     await ilan.drive_straight(7)
-    await multitask(ilan.drive_straight(-2,150), ilan.motor_back.run_angle(250,-290))
-    await ilan.drive_straight(-27)
-    await ilan.turn(22)
-    await ilan.motor_back.run_angle(250,90)
-    await ilan.drive_straight(-40,200)
-    await ilan.turn(14)
-    await ilan.drive_straight(8)
-    await ilan.drive_straight(-9)
-    await ilan.run_back_motor(200, 120)
+    await multitask(ilan.drive_straight(-29,300), ilan.motor_back.run_angle(250,-290))
+    await ilan.turn(110)
+    await ilan.motor_back.run_angle(150,270)
+    await ilan.drive_straight(-23,200)
+    await ilan.run_back_motor(200, -100)
+    # await ilan.wait_for_button()
+    await multitask(ilan.drive_straight(9))
+
 async def sonar():
     await ilan.drive_straight(-30,300)
     await ilan.turn(90)
@@ -157,7 +153,9 @@ async def massive():
     await ilan.drive_back(40,200)
 
 async def test():
-        await multitask(ilan.drive_straight(15,100), ilan.motor_back.run_angle(200,160))
+
+
+        await multitask(ilan.drive_straight(15,90), ilan.motor_back.run_angle(230,162))
         # await wait(10)
         await ilan.drive_straight(2)
 
@@ -189,7 +187,7 @@ async def main():
         ("5", nigg, Icon.CIRCLE),
         ("6", turn, Icon.CLOCKWISE),
         ("crabs", crabs, Icon.HAPPY),
-        ("7",whale, Icon.SAD),
+        ("7", whale_unt_sonar, Icon.SAD),
         ("T", test),
         ("8", sonar,Icon.HEART),
         ("1", massive, Icon.LEFT),
@@ -197,6 +195,7 @@ async def main():
     ]
     current_run = 0
     print("current", ilan.hub.battery.current(), "voltage", ilan.hub.battery.voltage())
+    
             
     while True:
         try:
@@ -224,3 +223,17 @@ async def main():
 
 
 run_task(main())
+
+
+class Timer:
+    def __init__(self):
+        self.start_time = None
+        self.end_time = None
+
+    def start(self):
+        self.start_time = StopWatch()
+
+    def stop(self):
+        self.end_time = self.start_time.time()
+        return self.end_time
+
