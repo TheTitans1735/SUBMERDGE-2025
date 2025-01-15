@@ -154,8 +154,8 @@ async def massive():
 
 async def test():
 
-    await ilan.drive_straight(10,200)
-    await ilan.motor_front.run_angle(150,90)
+    await ilan.drive_straight(17,200)
+    await ilan.motor_front.run_angle(250,130)
     await ilan.drive_straight(2)
 async def main():
     runs = [
