@@ -178,7 +178,7 @@ class Robot:
         # p = סטייה עכשיות 
         # i = מתקן לזווית 0``
         # d = מחזיר למסלול המקורי
-        pid = PIDController(kp=1, ki=0.13, kd=2.2)        # pid = PIDController(kp=0.97, ki=0.05, kd=1.82)
+        pid = PIDController(kp=1, ki=0, kd=0)        #pid = PIDController(kp=1, ki=0.13, kd=2.2)
         kp = 0.97
         ki = 0.05
         kd = 1.82

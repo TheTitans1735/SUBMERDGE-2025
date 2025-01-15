@@ -144,34 +144,18 @@ async def massive():
     await ilan.wait_for_button()
     await ilan.motor_front.run_angle(200,1000)
     await ilan.wait_for_button()
-    await ilan.drive_back(10,200)
+    await ilan.drive_straight(-10,200)
     await ilan.wait_for_button()
     await ilan.turn(30,200)
     await ilan.wait_for_button()
-    await ilan.drive_back(40,200)
+    await ilan.drive_straight(-40,200)
 
 async def test():
 
-    await ilan.drive_with_turn(50,90)
-        # await multitask(ilan.drive_straight(15,90), ilan.motor_back.run_angle(230,162))
-        # # await wait(10)
-        # await ilan.drive_straight(2)
+    await ilan.drive_straight(19,200)
+    await ilan.run_front_motor(200,120)
+    
 
-#       await ilan.arc_turn(100,90)
-# async def play_sound():
-        # await ilan.hub.speaker.beep(1000, 500)
-            # async def play_sound():
-            #     notes = [
-            #         (1000, 500), (1200, 500), (1400, 500), (1600, 500),
-            #         (1800, 500), (2000, 500), (2200, 500), (2400, 500)
-            #     ]
-            #     for frequency, duration in notes:
-            #         ilan.hub.speaker.beep(frequency, duration)
-            #         await wait(duration)
-            # await play_sound()
-
-        # Add your hardware update logic here
-# this is the main program
 async def main():
     runs = [
         ("5", drive, Icon.ARROW_LEFT),
