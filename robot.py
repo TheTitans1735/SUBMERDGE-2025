@@ -227,29 +227,7 @@ class Robot:
         if stop_at_end:
             self.drive_base.stop()
 
-    # async def drive_back(
-    #     self, 
-    #     distance_cm, 
-    #     speed=450, 
-    #     stop_at_end=True, 
-    #     timeout_seconds=None, 
-    #     gradual_stop=True, 
-    #     gradual_start=True,
-    # ):
-    #     """
-    #     Drive backwards using PID control for the DriveBase based on the drive base angle.
-    #     :param distance_cm: Distance in centimeters.
-    #     :param speed: Speed in degrees per second.
-    #     :param stop_at_end: Whether to stop the motors when finished.
-    #     """
-    #     await self.drive_straight(
-    #         distance_cm=-1*distance_cm, 
-    #         target_speed=speed, 
-    #         stop_at_end=stop_at_end, 
-    #         timeout_seconds=timeout_seconds, 
-    #         gradual_stop=gradual_stop, 
-    #         gradual_start=gradual_start,
-    #     )
+    
 
     # async def arc_turn(self, radius_cm, angle_deg, speed=150):
     #     """
