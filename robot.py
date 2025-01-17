@@ -178,7 +178,7 @@ class Robot:
         # p = סטייה עכשיות 
         # i = מתקן לזווית 0``
         # d = מחזיר למסלול המקורי
-        pid = PIDController(kp=1, ki=0, kd=0)        #pid = PIDController(kp=1, ki=0.13, kd=2.2)
+        pid = PIDController(kp=1, ki=0.13, kd=2.2)       #pid = PIDController(kp=1, ki=0.13, kd=2.2)
         kp = 0.97
         ki = 0.05
         kd = 1.82
@@ -228,6 +228,77 @@ class Robot:
             self.drive_base.stop()
 
     
+
+    async def drive_straight_masiv(
+        self, 
+        distance_cm, 
+        target_speed=450, 
+        stop_at_end=True, 
+        timeout_seconds=None, 
+        gradual_stop=True, 
+        gradual_start=True,
+    ):
+        """
+        Drive straight using PID control for the DriveBase based on the drive base angle.
+        Negative distance_cm values will drive backwards.
+        :param distance_cm: Distance in centimeters.
+        :param speed: Speed in degrees per second.
+        :param stop_at_end: Whether to stop the motors when finished.
+        :param target_speed: Speed in degrees per second.
+        """
+        # Initialize PID controller
+        # p = סטייה עכשיות 
+        # i = מתקן לזווית 0``
+        # d = מחזיר למסלול המקורי
+        pid = PIDController(kp=3, ki=0, kd=0)       #pid = PIDController(kp=1, ki=0.13, kd=2.2)
+        kp = 0.97
+        ki = 0.05
+        kd = 1.82
+        # Initialize the timer
+        timer = StopWatch()
+        # Calculate the target angle
+        target_distance = distance_cm * 10
+        #set the speed according to the distance
+        if distance_cm < 0:
+            target_speed = -target_speed
+            target_distance = -target_distance
+        # reset robot angle and distance
+        self.drive_base.reset()
+        direction = 1 if distance_cm > 0 else -1
+
+        # Drive until the target distance is reached, correct angle using PID
+        while True:
+            # Calculate the current angle
+            current_angle = self.drive_base.angle()
+            current_distance = self.drive_base.distance()
+            # Calculate the correction
+            correction = await pid.compute(0, current_angle)
+            # Calculate the speed if gradual start/stop is enabled according to distance
+            if abs(current_distance) < target_distance / 2:
+                speed = target_speed
+                if gradual_start:
+                    speed = target_speed * abs(current_distance) / (target_distance / 2)
+            else:
+                speed = target_speed
+                if gradual_stop:
+                    speed = target_speed * (target_distance - abs(current_distance)) / (target_distance / 2)        
+            #set minimum speed
+            if abs(speed) < 100:
+                speed = 100 * direction 
+            print(f"Speed: {speed}, Correction: {correction}, travel: {current_distance}, current_angle: {current_angle}")
+            # Set the motor speed
+            self.drive_base.drive(speed, correction)
+            # Check if the target distance is reached
+            if abs(current_distance) >= abs(target_distance):
+                break
+            # Check if the timeout is reached
+            if timeout_seconds is not None and timer.time() > timeout_seconds:
+                break  
+            await wait(1)
+        # Stop the motors
+        if stop_at_end:
+            self.drive_base.stop()
+
 
     # async def arc_turn(self, radius_cm, angle_deg, speed=150):
     #     """

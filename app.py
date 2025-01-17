@@ -121,17 +121,17 @@ async def banana():
 
 async def crabs():
     # await ilan.run_back_motor(-200,200)
-    await ilan.drive_straight(-97, 700, gradual_start=False)
+    await ilan.drive_straight(-104, 700, gradual_start=False)
     await ilan.run_back_motor(200,360)
-    await ilan.drive_straight(11,200)
+    await ilan.drive_straight(8.5,190)
     await wait(1000)
-    await ilan.drive_straight(30,700)
-    await ilan.turn(-20,300)
-    await ilan.drive_straight(-40,700)
-    await ilan.turn(20,300)
-    await ilan.drive_straight(-40,700)
-    await ilan.turn(15,400)
+    await ilan.drive_straight(18,700)
+    await ilan.turn(-40,200)
     await ilan.drive_straight(-10,700)
+
+
+
+    
 
     
 
