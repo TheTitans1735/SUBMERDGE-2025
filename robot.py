@@ -165,6 +165,9 @@ class Robot:
         timeout_seconds=None, 
         gradual_stop=True, 
         gradual_start=True,
+        kp=1, 
+        ki=0.13, 
+        kd=2.2,
     ):
         """
         Drive straight using PID control for the DriveBase based on the drive base angle.
@@ -178,10 +181,7 @@ class Robot:
         # p = סטייה עכשיות 
         # i = מתקן לזווית 0``
         # d = מחזיר למסלול המקורי
-        pid = PIDController(kp=1, ki=0.13, kd=2.2)       #pid = PIDController(kp=1, ki=0.13, kd=2.2)
-        kp = 0.97
-        ki = 0.05
-        kd = 1.82
+        pid = PIDController(kp, ki, kd)
         # Initialize the timer
         timer = StopWatch()
         # Calculate the target angle
@@ -250,7 +250,7 @@ class Robot:
         # p = סטייה עכשיות 
         # i = מתקן לזווית 0``
         # d = מחזיר למסלול המקורי
-        pid = PIDController(kp=3, ki=0, kd=0)       #pid = PIDController(kp=1, ki=0.13, kd=2.2)
+        pid = PIDController(kp=0.5, ki=0.5, kd=1)       #pid = PIDController(kp=1, ki=0.13, kd=2.2)
         kp = 0.97
         ki = 0.05
         kd = 1.82
@@ -283,8 +283,8 @@ class Robot:
                 if gradual_stop:
                     speed = target_speed * (target_distance - abs(current_distance)) / (target_distance / 2)        
             #set minimum speed
-            if abs(speed) < 100:
-                speed = 100 * direction 
+            if abs(speed) < 50:
+                speed = 50 * direction 
             print(f"Speed: {speed}, Correction: {correction}, travel: {current_distance}, current_angle: {current_angle}")
             # Set the motor speed
             self.drive_base.drive(speed, correction)
