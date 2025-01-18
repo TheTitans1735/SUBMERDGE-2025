@@ -121,19 +121,17 @@ async def banana():
 
 async def crabs():
     # await ilan.run_back_motor(-200,200)
-    await ilan.drive_straight(-104, 700, gradual_start=False)
-    await ilan.run_back_motor(200,360)
-    await ilan.drive_straight(8.5,190)
-    await wait(1000)
-    await ilan.drive_straight(18,700)
-    await ilan.turn(-40,200)
-    await ilan.drive_straight(-10,700)
+    await ilan.drive_straight(-107,800, gradual_start=False, kp = 0, ki = 0, kd = 0)
+    await ilan.run_back_motor(200,350)
+    await ilan.drive_straight(11.8,160, kp = 0, ki = 0, kd = 0)
+    await multitask(ilan.drive_straight(22,450, kp = 0, ki = 0, kd = 0), ilan.run_back_motor(200, -100))
+    await ilan.turn(-32,100)
+    await ilan.drive_straight(-35,450, kp = 0, ki = 0, kd = 0)
+    await ilan.turn(30,100)
+    await ilan.drive_straight(-50,450, kp = 0, ki = 0, kd = 0)
+    await ilan.turn(20,150)
+    await ilan.drive_straight(-30,700, kp = 0, ki = 0, kd = 0)
 
-
-
-    
-
-    
 
 async def massive():
     await ilan.drive_straight(40,200)
@@ -157,13 +155,7 @@ async def massive():
     await ilan.drive_straight(-40,200)
 
 async def test():
-    # await ilan.motor_back.run_angle(200,135)
-    # await ilan.wait_for_button()
-    # await ilan.motor_back.run_angle(200,-135)
-    await multitask(ilan.drive_straight(11.5,90, gradual_start=True), ilan.motor_back.run_angle(200,140))
-    # await wait(1000)
-    # await ilan.drive_straight(2,200)
-    # await ilan.drive_straight(4,200)
+    await ilan.drive_straight(-60,450, kp = 0, ki = 0, kd = 0)
 
 
 

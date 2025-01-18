@@ -182,6 +182,9 @@ class Robot:
         # i = מתקן לזווית 0``
         # d = מחזיר למסלול המקורי
         pid = PIDController(kp, ki, kd)
+        kp = 0.97
+        ki = 0.05
+        kd = 1.82
         # Initialize the timer
         timer = StopWatch()
         # Calculate the target angle
