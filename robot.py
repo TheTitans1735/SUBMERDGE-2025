@@ -42,7 +42,7 @@ class Robot:
         self.drive_base = DriveBase(self.left_motor, self.right_motor,57,112) 
         self.left_color_sensor = ColorSensor(Port.E)    
         self.right__color_sensor = ColorSensor(Port.A)       
-            # self.drive_base.use_gyro(True)
+        self.drive_base.use_gyro(True)
 
     async def drive_straight_old(
         self,
