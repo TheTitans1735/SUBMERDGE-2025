@@ -160,7 +160,7 @@ class Robot:
     async def drive_straight(
         self, 
         distance_cm, 
-        target_speed=450, 
+        target_speed=200, 
         stop_at_end=True, 
         timeout_seconds=None, 
         gradual_stop=True, 
