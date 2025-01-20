@@ -124,13 +124,13 @@ async def crabs():
     # await ilan.run_back_motor(-200,200)
     await ilan.drive_straight(-107,800, gradual_start=False, kp = 0, ki = 0, kd = 0)
     await ilan.run_back_motor(200,350)
-    await ilan.drive_straight(11.8,150, kp = 0, ki = 0, kd = 0)
+    await ilan.drive_straight(11,150, kp = 0, ki = 0, kd = 0)
     await multitask(ilan.drive_straight(25,450, kp = 0, ki = 0, kd = 0), ilan.run_back_motor(200, -100))
     await ilan.turn(-31,100)
     await ilan.drive_straight(-35,450, kp = 0, ki = 0, kd = 0)
-    await ilan.turn(28,100)
+    await ilan.turn(29,50)
     await ilan.drive_straight(-50,450, kp = 0, ki = 0, kd = 0)
-    await ilan.turn(25,150)
+    await ilan.turn(20,150)
     await ilan.drive_straight(-40,900, kp = 0, ki = 0, kd = 0)
 
 
