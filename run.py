@@ -77,20 +77,20 @@ async def prepare_whale_motor():
 
 async def whale():
     pid = {"kp":1, "ki":0.1, "kd": 0.01}
-    await multitask(ilan.drive_straight(65,200, **pid), prepare_whale_motor())
+    await multitask(ilan.drive_straight(62,200, **pid), prepare_whale_motor())
     await ilan.wait_for_button(debug=False)
-    await ilan.turn(78)
+    await ilan.turn(73)
     await ilan.wait_for_button(debug=True)
     await ilan.drive_straight(30,150, **pid)
     await wait(1000)
     await ilan.drive_straight(-2,150, **pid)
     await ilan.wait_for_button()
     await ilan.drive_straight(4, **pid)
-    await multitask(ilan.drive_straight(-20,150, **pid), ilan.motor_back.run_angle(250,-290))
+    await multitask(ilan.drive_straight(-20,100, **pid), ilan.motor_back.run_angle(250,-290))
     await ilan.turn(100)
     await ilan.motor_back.run_angle(250,90)
     await ilan.motor_back.run_angle(80,120)
-    await ilan.drive_straight(-10,200,**pid)
+    await ilan.drive_straight(-20,150,**pid,)
     # await ilan.turn(14)
     # await ilan.drive_straight(8)
     await multitask(ilan.drive_straight(-9, **pid))
@@ -106,21 +106,23 @@ async def sonar():
     await ilan.run_back_motor(300,-90)
 
 async def banana():
-    await ilan.drive_straight(40,320)
-    await ilan.drive_straight(-20,320)
+    pid = {"kp":1, "ki":0.1, "kd": 0.01}
+    await ilan.motor_back.run_angle(100,1)
+    await ilan.drive_straight(41,220, **pid)
+    await ilan.drive_straight(-22,220, **pid)
     await ilan.run_front_motor(310,300)
     await ilan.turn(43,170)
-    await ilan.drive_straight(33,230)
+    await ilan.drive_straight(33,230,**pid)
     await ilan.turn(36,170)
-    await ilan.drive_straight(8,260)
+    await ilan.drive_straight(8,260,**pid)
     await ilan.turn(28,170)
-    await ilan.drive_straight(6,200)
+    await ilan.drive_straight(6,200, **pid)
     await ilan.run_front_motor(320,-300)
-    await ilan.drive_straight(-10,260)
+    await ilan.drive_straight(-10,260, **pid)
     await ilan.turn(-133,170)
-    await ilan.drive_straight(-7,330)
+    await ilan.drive_straight(-7,330 ,**pid)
     await ilan.run_back_motor(200,360)
-    await ilan.drive_straight(-5,370)
+    await ilan.drive_straight(-5,370, **pid)
 
 async def crabs():
     await ilan.drive_straight(60)
@@ -170,13 +172,9 @@ async def massive():
     # await ilan.drive_straight(-40,200)
 
 async def test():
-    await ilan.drive_straight(50, 300, kp =1 ,ki =0 ,kd =0)
-    # for kp, ki, kd in [
-    #     (0.8, 0, 0), (1, 0, 0), (1.2, 0, 0), (0, 0.5, 0), (3, 0, 0)
-    # ]:
-    #     print(f"{kp=} {ki=} {kd=}")
-    #     await ilan.drive_straight(50, kp=kp, ki=ki, kd=kd)
-    #     await ilan.wait_for_button(debug=True)
+    pid = {"kp":1, "ki":0, "kd": 0}
+    await ilan.drive_straight(107,800)
+
 
 async def main():
     runs = [

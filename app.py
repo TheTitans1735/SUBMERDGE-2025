@@ -152,7 +152,10 @@ async def massive():
 
 
 async def test():
-    await ilan.drive_straight(50,300, kp = 1, ki = 0, kd = 0)
+    pid = {"kp":2, "ki":0.2, "kd": 0.22}
+    await ilan.drive_straight(-57,800, **pid)
+    await ilan.turn(5,200)
+    await ilan.drive_straight(-50,800, **pid)
 
 
 
