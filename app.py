@@ -135,27 +135,36 @@ async def crabs():
 
 
 async def massive():
-    pid = {"kp": 1.32, "ki": 0.1, "kd": 0.01}
-    await ilan.drive_straight(51,150, **pid)
+    pid = {"kp": 1, "ki": 0, "kd": 0}
+    await ilan.drive_straight(52,300, **pid)
     await ilan.run_back_motor(200,160)
-    await multitask(ilan.drive_straight(19,90, gradual_start=True, **pid), ilan.motor_back.run_angle(200,15))
-    # await ilan.wait_for_button()
-    # await ilan.turn(-10)
-    await ilan.run_back_motor(200,-40)
+    await ilan.turn(-4,200)
+    await ilan.drive_straight(18.5,300, gradual_start=False, **pid)
+    await ilan.wait_for_button()
+    await ilan.drive_straight(-2.5,300)
+    await ilan.wait_for_button()
+    await ilan.run_back_motor(200,-50)
+    await ilan.wait_for_button()
     await ilan.motor_front.run_angle(200,-400)
+    await ilan.wait_for_button()
+    await ilan.turn(10,200)
+    await ilan.wait_for_button()
     await ilan.motor_front.run_angle(200,5)
+    await ilan.wait_for_button()
     await ilan.motor_front.run_angle(400,650)
+    await ilan.wait_for_button()
     await ilan.motor_front.run_angle(200,-300)
+    await ilan.wait_for_button()
     await ilan.drive_straight(-10,200, **pid)
+    await ilan.wait_for_button()
     await ilan.turn(30)
-    await ilan.drive_straight(-40,200, **pid)
+    await ilan.wait_for_button()
+    await ilan.drive_straight(-40,500, **pid)
 
 
 async def test():
-    pid = {"kp":2, "ki":0.2, "kd": 0.22}
-    await ilan.drive_straight(-57,800, **pid)
-    await ilan.turn(5,200)
-    await ilan.drive_straight(-50,800, **pid)
+   pid = {"kp": 1, "ki": 0, "kd": 0}
+   await ilan.drive_straight(52,300, **pid)
 
 
 

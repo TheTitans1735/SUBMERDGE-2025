@@ -106,23 +106,29 @@ async def sonar():
     await ilan.run_back_motor(300,-90)
 
 async def banana():
-    pid = {"kp":1, "ki":0.1, "kd": 0.01}
+    pid = {"kp":1.2, "ki":0.1, "kd": 0.01}
     await ilan.motor_back.run_angle(100,1)
-    await ilan.drive_straight(41,220, **pid)
-    await ilan.drive_straight(-22,220, **pid)
+    await ilan.drive_straight(42,200, gradual_stop= False, **pid)
+    await ilan.drive_straight(-18,300, **pid)
     await ilan.run_front_motor(310,300)
-    await ilan.turn(43,170)
+    await ilan.turn(32,170)
     await ilan.drive_straight(33,230,**pid)
     await ilan.turn(36,170)
-    await ilan.drive_straight(8,260,**pid)
-    await ilan.turn(28,170)
-    await ilan.drive_straight(6,200, **pid)
-    await ilan.run_front_motor(320,-300)
-    await ilan.drive_straight(-10,260, **pid)
-    await ilan.turn(-133,170)
-    await ilan.drive_straight(-7,330 ,**pid)
-    await ilan.run_back_motor(200,360)
-    await ilan.drive_straight(-5,370, **pid)
+    await ilan.drive_straight(7.5,260,**pid)
+    await ilan.wait_for_button()
+    # await ilan.turn(28,170)
+    # await ilan.wait_for_button()
+    # await ilan.run_front_motor(320,-300)
+    # await ilan.wait_for_button()
+    # await ilan.drive_straight(-10,260, **pid)
+    # await ilan.wait_for_button()
+    # await ilan.turn(-133,170)
+    # await ilan.wait_for_button()
+    # await ilan.drive_straight(-7,330 ,**pid)
+    # await ilan.wait_for_button()
+    # await ilan.run_back_motor(200,360)
+    # await ilan.wait_for_button()
+    # await ilan.drive_straight(-5,370, **pid)
 
 async def crabs():
     await ilan.drive_straight(60)
@@ -137,7 +143,7 @@ async def crabs():
 
 async def massive():
     pid = {"kp": 1.32, "ki": 0.1, "kd": 0.01}
-    await ilan.drive_straight(52,350, **pid)
+    await ilan.drive_straight(52,300, **pid)
     await ilan.run_back_motor(200,160)
     await ilan.turn(-4,200)
     await ilan.drive_straight(18.5,300, gradual_start=False, **pid)
@@ -173,12 +179,13 @@ async def massive():
     # await ilan.drive_straight(-40,200)
 
 async def test():
-    pid = {"kp":1, "ki":0, "kd": 0}
-    await ilan.drive_straight(107,800)
+    pid = {"kp":1, "ki":0.1, "kd": 0.01}
+    await ilan.drive_straight(60,200, gradual_stop= False, **pid)
 
 
 async def main():
     runs = [
+        ("2", banana, Icon.EYE_LEFT_BROW),
         ("5", drive, Icon.ARROW_LEFT),
         ("6", reverse_drive, Icon.ARROW_RIGHT),
         ("7", turn_left, Icon.ARROW_LEFT_DOWN),
@@ -194,7 +201,7 @@ async def main():
         ("T", test),
         ("8", sonar,Icon.HEART),
         ("1", massive, Icon.LEFT),
-        ("2", banana, Icon.EMPTY)
+
         # ("9", play_sound)
     ]
     current_run = 0
